@@ -30,5 +30,3 @@ class CrosswalkEnv(MultiPedestrianEnv):
     
     def getCrossWalkPoint(self, worldPoint):
         return (worldPoint[0] - self.crosswalkOrigin[0], worldPoint[1] - self.crosswalkOrigin[1])
-
-        
