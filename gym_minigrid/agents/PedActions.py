@@ -2,8 +2,7 @@ from enum import IntEnum
 
 class PedActions(IntEnum):
     forward = 0
-    shiftLeft = 1
-    shiftRight = 2
+    moveLeft = 1
+    moveRight = 2
     doNothing = 3
-
-    #TODO
+    goBack = 4

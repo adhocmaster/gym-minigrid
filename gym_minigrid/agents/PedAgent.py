@@ -1,26 +1,14 @@
 from gym_minigrid.agents.Agent import Agent
 from gym_minigrid.agents import Lanes
-from gym_minigrid.lib.Action import Action
-from gym_minigrid.lib.LaneAction import LaneAction
-from gym_minigrid.lib.ForwardAction import ForwardAction
 import numpy as np
 
 class PedAgent(Agent):
     # [0] = x axis [1] = y-axis
     # 1 = down face
     # 3 = up face
-    def parallel1(self, env): # TODO add type
-        """_summary_
-
-        Args:
-            agents (_type_): _description_
-
-        Returns:
-            _type_: 0 to keep lane, 1 shiftLeft, 2 shiftRight
-        """
-        agents = env.agents
+    def parallel1(self, agents):
         #TODO Simulate lane change
-        gaps = np.zeros((3, 4)).astype(int)
+        gaps = np.zeros((3, 3)).astype(int)
         gaps[0] = self.computeGap(agents, Lanes.currentLane)
         if self.canShiftLeft == True:
             gaps[1] = self.computeGap(agents, Lanes.leftLane)
@@ -60,33 +48,17 @@ class PedAgent(Agent):
             else:
                 lane = goodLanes[2]
 
-        self.gap = gaps[lane][0]
+        self.speed = gaps[lane][0]
         self.gapSame = gaps[lane][1]
         self.gapOpp = gaps[lane][2]
-        self.agentOppIndex = gaps[lane][3]
 
-        # return lane
+        return lane
+        pass
         
-        return self.convertLaneDecisionToAction(lane)
 
-    def convertLaneDecisionToAction(self, laneDecision: int) -> LaneAction:
-        if laneDecision == 0:
-            return None
-        if laneDecision == 1:
-            return Action(self, LaneAction.LEFT)
-        if laneDecision == 2:
-            return Action(self, LaneAction.RIGHT)
-
-    def parallel2(self, env): # TODO add type
-        agents = env.agents
-        self.speed = self.gap
-        if self.gapOpp == 0 and self.gap == self.gapOpp: # or <= 1 if using possibly wrong algorithm in paper
-            if np.random.random() < self.p_exchg:
-                self.speed = self.gap + 1
-                agents[self.agentOppIndex].speed = self.gap + 1
-        
-        return Action(self, ForwardAction.KEEP)
-        
+    def parallel2(agents):
+        #TODO What lane allows agent to move using max speed
+        pass
 
     def computeGap(self, agents, lane):
         """
@@ -107,33 +79,31 @@ class PedAgent(Agent):
                 continue
             if self.direction == 2: #looking up
                 gap = postionX - agent2.position[0]
+                if gap > 0 and gap <= 8: # gap must not be negative and less than 8
+                    gap_same = min(gap_same, gap)
             elif self.direction == 0: #looking down
                 gap = agent2.position[0] - postionY
+                if gap > 0 and gap <= 8: # gap must not be negative and less than 8
+                    gap_same = min(gap_same, gap)
 
-            if gap > 0 and gap <= 8: # gap must not be negative and less than 8
-                gap_same = min(gap_same, gap)
+                    
 
         # now oppGap
-        agentOppIndex = -1
-        for i, agent2 in enumerate(agents):
+        for agent2 in agents:
             #oppGap, so direction must be different and they must be in same lane
             if self.direction == agent2.direction or postionY != agent2.position[1]: 
                 continue
             if self.direction == 2: #looking up
                 gap = postionY - agent2.position[0]
+                if gap > 0 and gap <= 8: # gap must not be negative and less than 4
+                    gap_opposite = min(gap_opposite, gap/2)
             elif self.direction == 0: #looking down
                 gap = agent2.position[0] - postionY
-            
-            if gap > 0 and gap <= 8: # gap must not be negative and less than 4
-                if min(gap_opposite, gap/2) == gap/2:
-                    agentOppIndex = i
-                gap_opposite = min(gap_opposite, gap/2)
+                if gap > 0 and gap <= 8: # gap must not be negative and less than 4
+                    gap_opposite = min(gap_opposite, gap/2)
 
-        # if gap > maxSpeed, we only use maxSpeed since we pick lanes in parallel1 with gap size
-        # Anything > maxSpeed is irrelevant because it doesn't affect agent movement
-        # doesn't affect parallel2 because maxSpeed >= 2 and parallel2 checks for == 0 or <= 1
-        gap = min(self.maxSpeed, min(gap_same, gap_opposite))
-        return gap, gap_same, gap_opposite, agentOppIndex
+        gap = min(self.initSpeed, min(gap_same, gap_opposite))
+        return gap, gap_same, gap_opposite
         
 
    
