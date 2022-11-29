@@ -896,7 +896,6 @@ class MiniGridEnv(gym.Env):
     ):
         """
         Place an object at an empty position in the grid
-
         :param top: top-left position of the rectangle where to place
         :param size: size of the rectangle where to place
         :param reject_fn: function to filter out potential positions
