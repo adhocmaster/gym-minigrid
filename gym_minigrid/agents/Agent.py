@@ -7,8 +7,9 @@ class Agent:
         position: Tuple[int, int], 
         direction: int, 
         speed = 2,
+        exchangeProbability = 1
         ):
-
+        self.exchangeProbability = exchangeProbability
         self.initPosition = position
         self.initDirection = direction
         self.initSpeed = speed

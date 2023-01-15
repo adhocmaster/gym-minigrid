@@ -178,6 +178,8 @@ class MultiPedestrianEnv(MiniGridEnv):
                 agent.canShiftLeft = False
             if agent.position[1] == self.height - 2:
                 agent.canShiftRight = False
+            if agent.canShiftLeft == True or agent.canShiftRight == True:
+                print(agent.position)
         for agent1 in self.agents:
             for agent2 in self.agents:
                 if agent1 == agent2 or agent1.position[0] != agent2.position[0]:
@@ -215,16 +217,20 @@ class MultiPedestrianEnv(MiniGridEnv):
         self.eliminateConflict()
         LaneActions = []
         for agent in self.agents:
-            lane = agent.parallel1(self.agents)
-            print(lane, agent.speed, agent.gapSame, agent.gapOpp)
+            lane = agent.parallel1InterspersedFlow(self.agents)
+            print(lane, agent.speed, agent.gapSame, agent.gapOpp, agent.direction, agent.position)
             LaneActions.append(lane)
         
         for i, laneAction in enumerate(LaneActions):
             if laneAction == 1:
+                print(agent.position, "left")
                 self.shiftLeft(self.agents[i])
             elif laneAction == 2:
+                print(agent.position, 'right')
                 self.shiftRight(self.agents[i])
                 
+        for agent in self.agents:
+            agent.parallel2(self.agents)
         print('done')
 
         for agent in self.agents:
@@ -290,7 +296,7 @@ class MultiPedestrianEnv(MiniGridEnv):
 class MultiPedestrianEnv20x80(MultiPedestrianEnv):
     def __init__(self):
         width = 100
-        height = 60
+        height = 20
         super().__init__(
             width=width,
             height=height,

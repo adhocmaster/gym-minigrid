@@ -19,7 +19,7 @@ for i in range(0, 100):
     # print(env.step(action))
     env.render()
 
-    time.sleep(0.05)
+    time.sleep(0.5)
 
 # Test the close method
 env.close()
