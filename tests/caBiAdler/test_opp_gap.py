@@ -1,8 +1,9 @@
-import pytest
-from gym_minigrid.lib.Direction import Direction
+
 from gym_minigrid.agents import BlueAdlerPedAgent
 from gym_minigrid.agents import Lanes
 import math
+
+from gym_minigrid.wrappers import DirectionObsWrapper as Direction
 
 
 

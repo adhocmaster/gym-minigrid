@@ -10,7 +10,7 @@ from .PedAgent import PedAgent
 from gym_minigrid.lib.LaneAction import LaneAction
 from gym_minigrid.lib.Action import Action
 from gym_minigrid.lib.ForwardAction import ForwardAction
-from gym_minigrid.lib.Direction import Direction
+from gym_minigrid.wrappers import DirectionObsWrapper as Direction
 
 
 class BlueAdlerPedAgent(PedAgent):
