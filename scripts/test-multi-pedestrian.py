@@ -7,7 +7,7 @@ from gym_minigrid.wrappers import *
 from gym_minigrid.agents import PedAgent
 from gym_minigrid.lib.MetricCollector import MetricCollector
 import logging
-
+import pickle
 
 logging.basicConfig(level=logging.INFO)
 
