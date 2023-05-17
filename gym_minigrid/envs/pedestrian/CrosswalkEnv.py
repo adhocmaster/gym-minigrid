@@ -1,3 +1,4 @@
+from gym_minigrid import register
 from gym_minigrid.agents.Agent import Agent
 from .MultiPedestrianEnv import MultiPedestrianEnv
 
@@ -32,4 +33,7 @@ class CrosswalkEnv(MultiPedestrianEnv):
     def getCrossWalkPoint(self, worldPoint):
         return (worldPoint[0] - self.crosswalkOrigin[0], worldPoint[1] - self.crosswalkOrigin[1])
 
-        
+register(
+    id='Crosswalk-Empty-20x80-v0',
+    entry_point='gym_minigrid.envs.pedestrian.CrosswalkEnv:CrosswalkEnv',
+)
