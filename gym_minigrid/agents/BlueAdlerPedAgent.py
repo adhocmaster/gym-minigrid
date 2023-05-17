@@ -32,11 +32,11 @@ class BlueAdlerPedAgent(PedAgent):
             position=position,
             direction=direction,
             maxSpeed=maxSpeed,
-            speed=speed,
-            DML=DML,
-            p_exchg=p_exchg
+            speed=speed
         )
 
+        self.DML = DML
+        self.p_exchg = p_exchg
         self.pedVmax = pedVmax
 
 
@@ -58,11 +58,11 @@ class BlueAdlerPedAgent(PedAgent):
         gaps = [None] * 3
         gaps[0] = self.computeGap(agents, Lanes.currentLane, env)
         if self.canShiftLeft == True:
-            gaps[1] = self.computeGap(agents, Lanes.leftLane, env)
+            gaps[1] = self.computeGap(agents, LaneNum.leftLane, env)
         else:
             gaps[1] = -1, -1, -1, -10 # as backup in case gaps of 0 mess up the code, -10 is on purpose to avoid conflict with DML checking
         if self.canShiftRight == True:
-            gaps[2] = self.computeGap(agents, Lanes.rightLane, env)
+            gaps[2] = self.computeGap(agents, LaneNum.rightLane, env)
         else:
             gaps[2] = -1, -1, -1, -10 # as backup in case gaps of 0 mess up the code, -10 is on purpose to avoid conflict with DML checking
         # logging.info(gaps)
@@ -149,9 +149,9 @@ class BlueAdlerPedAgent(PedAgent):
         """
 
         laneOffset = 0
-        if lane == Lanes.leftLane:
+        if lane == LaneNum.leftLane:
             laneOffset = -1
-        elif lane == Lanes.rightLane:
+        elif lane == LaneNum.rightLane:
             laneOffset = 1
 
         sameAgents, oppositeAgents = self.getSameAndOppositeAgents(agents, laneOffset=laneOffset)
@@ -199,9 +199,9 @@ class BlueAdlerPedAgent(PedAgent):
 
     def isBehind(self, other:PedAgent) -> bool:
 
-        if self.direction == Direction.LR and self.position[0] > other.position[0]:
+        if self.direction == Direction.East and self.position[0] > other.position[0]:
             return False
-        if self.direction == Direction.RL and self.position[0] < other.position[0]:
+        if self.direction == Direction.West and self.position[0] < other.position[0]:
             return False
         return True
 
