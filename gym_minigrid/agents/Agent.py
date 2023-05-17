@@ -1,22 +1,36 @@
 from typing import Tuple
-
 import random
+import numpy as np
+
 class Agent:
     def __init__(
         self, 
+        id,
         position: Tuple[int, int], 
-        direction: int, 
-        speed = 2,
-        exchangeProbability = 1
+        direction: int,
+        DML: bool,
+        p_exchg: float
         ):
-        self.exchangeProbability = exchangeProbability
+
+        self.id = id
+
+        prob = np.random.random()
+        if prob < 0.05:
+            self.maxSpeed = 2
+        elif prob < 0.95:
+            self.maxSpeed = 3
+        else:
+            self.maxSpeed = 4
+
+        self.DML = DML
+        self.p_exchg = p_exchg
+
         self.initPosition = position
         self.initDirection = direction
-        self.initSpeed = speed
 
         self.position = position
         self.direction = direction
-        self.speed = speed
+        self.speed = self.maxSpeed
 
         self.canShiftLeft = True
         self.canShiftRight = True
@@ -34,9 +48,5 @@ class Agent:
         
         self.position = self.initPosition 
         self.direction = self.initDirection
-        self.speed = self.initSpeed
 
         pass
-
-    def getAction(self):
-        return random.randint(0, 2)

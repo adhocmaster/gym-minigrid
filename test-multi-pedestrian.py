@@ -5,6 +5,12 @@ import numpy as np
 import gym_minigrid
 from gym_minigrid.wrappers import *
 from gym_minigrid.agents import PedAgent
+from gym_minigrid.lib.MetricCollector import MetricCollector
+import logging
+import pickle5 as pickle
+
+logging.basicConfig(level=logging.INFO)
+
 # from gym_minigrid.envs import MultiPedestrianEnv
 # %matplotlib auto
 # %load_ext autoreload
@@ -12,26 +18,29 @@ from gym_minigrid.agents import PedAgent
 
 # Load the gym environment
 env = gym.make('MultiPedestrian-Empty-20x80-v0')
+metricCollector = MetricCollector(env)
 agents = []
-for i in range(30):
-    yPos = np.random.randint(2, 18)
-    xPos = np.random.randint(10, 40)
+
+possibleX = list(range(0, env.width))
+possibleY = list(range(1, env.height - 1))
+possibleCoordinates = []
+for i in possibleX:
+    for j in possibleY:
+        possibleCoordinates.append((i, j))
+
+logging.info(f"Number of possible coordinates is {len(possibleCoordinates)}")
+
+for i in range(int(env.density * env.width * (env.height - 2))): # -2 from height to account for top and bottom
+    randomIndex = np.random.randint(0, len(possibleCoordinates) - 1)
+    pos = possibleCoordinates[randomIndex]
     direction = 2 if np.random.random() > 0.5 else 0
-    prob = np.random.random()
-    if prob < 0.1:
-        speed = 1
-    elif prob < 0.9:
-        speed = 2
-    else:
-        speed = 3
-    agents.append(PedAgent((xPos, yPos), direction, speed))
-# agents.append(PedAgent((5, 1), 0, 1, 0.1))
-# agents.append(PedAgent((26, 1), 2, 3, .1))
+    agents.append(PedAgent(i, pos, direction))
+    del possibleCoordinates[randomIndex]
 env.addAgents(agents)
 
 env.reset()
 
-for i in range(0, 20):
+for i in range(1100):
 
     obs, reward, done, info = env.step(None)
     
@@ -39,10 +48,25 @@ for i in range(0, 20):
         "Reached the goal"
         break
 
-    env.render()
+    # env.render()
 
-    time.sleep(0.5)
+    if i % 100 == 0:
+        logging.info(f"Completed step {i+1}")
 
+    # time.sleep(0.05)
+
+logging.info(env.getAverageSpeed())
+
+stepStats = metricCollector.getStatistics()[0]
+avgSpeed = sum(stepStats["xSpeed"]) / len(stepStats["xSpeed"])
+logging.info("Average speed: " + str(avgSpeed))
+volumeStats = metricCollector.getStatistics()[1]
+avgVolume = sum(volumeStats) / len(volumeStats)
+logging.info("Average volume: " + str(avgVolume))
+
+dump = (avgSpeed, avgVolume)
+with open(f"{env.DML}.{env.p_exchg}.{env.density}.pickle", "wb") as f:
+    pickle.dump(dump, f)
 
 # Test the close method
 env.close()

@@ -3,13 +3,20 @@ from gym_minigrid.minigrid import *
 from gym_minigrid.register import register
 from gym_minigrid.agents import Agent, PedActions, PedAgent
 from gym_minigrid.envs.pedestrian.PedGrid import PedGrid
+from gym_minigrid.lib.Action import Action
+from gym_minigrid.lib.LaneAction import LaneAction
+from gym_minigrid.lib.ForwardAction import ForwardAction
+from .EnvEvent import EnvEvent
+import logging
+import random
+# from pyee.base import EventEmitter
 
 class MultiPedestrianEnv(MiniGridEnv):
     def __init__(
         self,
         agents: List[Agent]=None,
         width=8,
-        height=8,
+        height=8
     ):
         if agents is None:
             self.agents = []
@@ -19,18 +26,43 @@ class MultiPedestrianEnv(MiniGridEnv):
         super().__init__(
             width=width,
             height=height,
-            max_steps=1000, #4*width*height,
+            max_steps=100000, #4*width*height,
             # Set this to True for maximum speed
             see_through_walls=True
         )
+
+        self.stepsTaken = 0
+
+        self.stepBefore = []
+        self.stepParallel1 = []
+        self.stepParallel2 = []
+        self.stepParallel3 = []
+        self.stepParallel4 = []
+        self.stepAfter = []
+
+        self._actionHandlers = {
+            LaneAction: self.executeLaneAction,
+            ForwardAction: self.executeForwardAction,
+        }
+
     pass
 
     #region agent management
+
+    def getAgents(self):
+        return self.agents
+
     def addAgents(self, agents: List[Agent]):
-        self.agents.extend(agents)
+        for agent in agents:
+            self.addAgent(agent)
             
     def addAgent(self, agent: Agent):
         self.agents.append(agent)
+
+        ## attach event handlers
+        # TODO: this subscription must not be done in side the evironment as only the research knows about its decision and action phases.
+        self.subscribe(EnvEvent.stepParallel1, agent.parallel1) # TODO event name should be enums
+        self.subscribe(EnvEvent.stepParallel2, agent.parallel2) # TODO event name should be enums
         
     def getNumAgents(self):
         return len(self.agents)
@@ -39,23 +71,53 @@ class MultiPedestrianEnv(MiniGridEnv):
         for agent in self.agents:
             agent.reset()
 
+    def getDensity(self):
+        cells = (self.width - 1) * (self.height - 1)
+        agents = len(self.agents)
+        return agents/cells
+
+    def getAverageSpeed(self):
+        stepsIgnoring = 100
+        return self.stepsTaken / len(self.agents) / (self.step_count - stepsIgnoring)
+
+    def removeAgent(self, agent):
+        if agent in self.agents:
+            self.unsubscribe(EnvEvent.stepParallel1, agent.parallel1) # TODO event name should be enums
+            self.unsubscribe(EnvEvent.stepParallel2, agent.parallel2) # TODO event name should be enums
+            self.agents.remove(agent)
+        else:
+            logging.warn("Agent not in list")
+
     def forwardAgent(self, agent: Agent):
         # TODO DONE
-        
+        if self.step_count >= 100:
+            self.stepsTaken += agent.speed
         # Get the position in front of the agent
         assert agent.direction >= 0 and agent.direction < 4
         fwd_pos = agent.position + agent.speed * DIR_TO_VEC[agent.direction]
-        if fwd_pos[0] < 0 or fwd_pos[0] >= self.width:
-            self.agents.remove(agent)
+        # if fwd_pos[0] <= 0 or fwd_pos[0] >= self.width - 1: # = sign is to include gray squares on left & right
+        #     if fwd_pos[0] <= 0:
+        #         agent.position = (1, agent.position[1])
+        #     else:
+        #         agent.position = (self.width - 2, agent.position[1])
+        #     agent.direction = (agent.direction + 2) % 4
+        #     return
+        if fwd_pos[0] <= 1:
+            # random may introduce conflict
+            # agent.position = (self.width - 2, random.randint(1, self.height - 2))
+            agent.position = (self.width - 2, agent.position[1])
             return
-        # Terry - implemented speed ^ by multiplying speed with direction unit vector
+        elif fwd_pos[0] >= self.width - 2:
+            # agent.position = (1, random.randint(1, self.height - 2))
+            agent.position = (1, agent.position[1])
+            return
 
         # Get the contents of the cell in front of the agent
         fwd_cell = self.grid.get(*fwd_pos)
 
         # Move forward if no overlap
         if fwd_cell == None or fwd_cell.can_overlap():
-                agent.position = fwd_pos
+            agent.position = fwd_pos
         # Terry - Once we get validateAgentPositions working, we won't need to check
         pass
 
@@ -178,8 +240,6 @@ class MultiPedestrianEnv(MiniGridEnv):
                 agent.canShiftLeft = False
             if agent.position[1] == self.height - 2:
                 agent.canShiftRight = False
-            if agent.canShiftLeft == True or agent.canShiftRight == True:
-                print(agent.position)
         for agent1 in self.agents:
             for agent2 in self.agents:
                 if agent1 == agent2 or agent1.position[0] != agent2.position[0]:
@@ -195,88 +255,146 @@ class MultiPedestrianEnv(MiniGridEnv):
                         agent1.canShiftLeft = False 
                     else: 
                         agent2.canShiftRight = False
+        # self.agents.sort(key=lambda agent: (agent.position[0], agent.position[1]))
+        # for i in range(1, len(self.agents)):
+        #     if self.agents[i].position[0] != self.agents[i-1].position[0]:
+        #         continue
+
+        #     if (self.agents[i].position[1] - self.agents[i-1].position[1]) == 1:
+        #         # they are adjacent
+        #         self.agents[i].canShiftLeft = False
+        #         self.agents[i-1].canShiftRight = False
+        #     elif (self.agents[i].position[1] - self.agents[i-1].position[1]) == 2 and self.agents[i].canShiftLeft == True and self.agents[i-1].canShiftRight == True:  
+        #         # they have one cell between them
+        #         if np.random.random() > 0.5:
+        #             self.agents[i].canShiftLeft = False
+        #         else: 
+        #             self.agents[i-1].canShiftRight = False
 
         # for agent in self.agents:
         #     if agent.position[0] < 1 or agent.position[0] == self.width - 1:
         #         self.agents.remove(agent)
-        #         print('removed')
+        #         logging.debug('removed')
 
     # One step after parallel1 and parallel2
     # Save plans from parallel1 and parallel2 before actually executing it
 
+    def unsubscribe(self, envEvent: EnvEvent, handler):
+
+        if envEvent == envEvent.stepBefore: 
+            self.stepBefore.remove(handler)
+
+        if envEvent == envEvent.stepAfter: 
+            self.stepAfter.remove(handler)
+            
+        if envEvent == envEvent.stepParallel1: 
+            self.stepParallel1.remove(handler)
+
+        if envEvent == envEvent.stepParallel2: 
+            self.stepParallel2.remove(handler)
+    
+    def subscribe(self, envEvent, handler):
+
+        if envEvent == envEvent.stepBefore: 
+            self.stepBefore.append(handler)
+
+        if envEvent == envEvent.stepAfter: 
+            self.stepAfter.append(handler)
+
+        if envEvent == envEvent.stepParallel1: 
+            self.stepParallel1.append(handler)
+
+        if envEvent == envEvent.stepParallel2: 
+            self.stepParallel2.append(handler)
+    
+    def emitEventAndGetResponse(self, envEvent) -> List[Action]:
+
+        logging.debug(f"executing {envEvent}")
+        if envEvent == EnvEvent.stepBefore: 
+            return [handler(self) for handler in self.stepBefore]
+
+        if envEvent == EnvEvent.stepAfter: 
+            return [handler(self) for handler in self.stepAfter]
+
+        # logging.debug(self.stepParallel1)
+        # logging.debug(self.stepParallel2)
+        if envEvent == EnvEvent.stepParallel1: 
+            return [handler(self) for handler in self.stepParallel1] # TODO fix for multiple actions by a single handler.
+
+        if envEvent == EnvEvent.stepParallel2: 
+            return [handler(self) for handler in self.stepParallel2]
+
+
+    
+
     def step(self, action=None):
+        """This step is tightly coupled with the research, how can we decouple it?
+
+        Args:
+            action (_type_, optional): _description_. Defaults to None.
+
+        Returns:
+            _type_: _description_
+        """
+        self.emitEventAndGetResponse(EnvEvent.stepBefore)
+
         self.step_count += 1
 
         reward = 0
         done = False
 
-        # TODO:
-        # 1. get the agent
-        # 2. decide what type of action (move forward, change lane (moveLeft or moveRight), do nothing)
-        # 3. call the method that takes the action
         self.eliminateConflict()
-        LaneActions = []
-        for agent in self.agents:
-            lane = agent.parallel1InterspersedFlow(self.agents)
-            print(lane, agent.speed, agent.gapSame, agent.gapOpp, agent.direction, agent.position)
-            LaneActions.append(lane)
-        
-        for i, laneAction in enumerate(LaneActions):
-            if laneAction == 1:
-                print(agent.position, "left")
-                self.shiftLeft(self.agents[i])
-            elif laneAction == 2:
-                print(agent.position, 'right')
-                self.shiftRight(self.agents[i])
-                
-        for agent in self.agents:
-            agent.parallel2(self.agents)
-        print('done')
 
-        for agent in self.agents:
-            self.forwardAgent(agent)
-            agent.canShiftLeft = True
-            agent.canShiftRight = True
-        # actions = []
-        # for agent in self.agents:
-        #     action = agent.getAction()
-        #     actions.append(action)
+        actions = self.emitEventAndGetResponse(EnvEvent.stepParallel1)
+        self.executeActions(actions)
 
-        newAgentsGrid = np.zeros((self.width, self.height))
-        # Terry - create the new agentsGrid here before actually testing the actions
-        # We simulate the new positions here to check for an overlap of agents
-        # Change value at agent positions to 1 as we iterate over all the agents
-        # Check if value equals 1 before setting the value to check if there
-        # is already an agent there
-        # If yes, then we can't have the agent take that action because there would
-        # be 2 agents in the same position
-        # After simulating the new agents grid and there isn't any problems
-        # with all the actions, then set self.agentsGrid = newAgentsGrid
-        # to update the existing grid and proceed to taking the actions below
-        
-        
-        # index = 0
-        # for agent in self.agents:
-
-        #     if actions[index] == PedActions.forward:
-        #         self.forwardAgent(agent)
-        #     elif actions[index] == PedActions.shiftLeft:
-        #         self.shiftLeft(agent)
-        #     elif actions[index] == PedActions.shiftRight:
-        #         self.shiftRight(agent)
-        #     else:
-        #         assert False, f"unknown action {action}"
-
-        #     index += 1
+        actions = self.emitEventAndGetResponse(EnvEvent.stepParallel2)
+        self.executeActions(actions)
 
         if self.step_count >= self.max_steps:
             done = True
 
         obs = self.gen_obs()
+
+        
+        self.emitEventAndGetResponse(EnvEvent.stepAfter)
         
         return obs, reward, done, {}
 
+    def executeActions(self, actions: List[Action]):
+        if len(actions) == 0:
+            return
+        # TODO
 
+        for action in actions:
+            if action is not None:
+                self._actionHandlers[action.action.__class__](action)
+            # self.executeAction(action)
+        pass
+
+    def executeLaneAction(self, action: Action):
+        if action is None:
+            return 
+        if action == 1:
+            self.shiftLeft(self.agents[i])
+        elif action == 2:
+            self.shiftRight(self.agents[i])
+        pass
+
+    def executeForwardAction(self, action: Action):
+        if action is None:
+            return 
+
+
+            
+        agent = action.agent
+
+        logging.debug(f"forwarding agent {agent.id}")
+
+        self.forwardAgent(agent)
+        agent.canShiftLeft = True
+        agent.canShiftRight = True
+        pass
 
     def gen_obs(self):
         """
@@ -295,8 +413,8 @@ class MultiPedestrianEnv(MiniGridEnv):
 
 class MultiPedestrianEnv20x80(MultiPedestrianEnv):
     def __init__(self):
-        width = 100
-        height = 20
+        width = 50
+        height = 12 # actual height: 10 + 2 gray square on top and bottom
         super().__init__(
             width=width,
             height=height,
