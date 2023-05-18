@@ -48,7 +48,7 @@ def test_2_agents(env):
     agent1Speed = 3
     agent1 = BlueAdlerPedAgent(
         id=1,
-        position=(17,1),
+        position=agent1Position,
         direction=Direction.LR,
         speed=3,
         DML=False,
@@ -61,7 +61,7 @@ def test_2_agents(env):
     agent2Speed = 3
     agent2 = BlueAdlerPedAgent(
         id=1,
-        position=(6,1),
+        position=agent2Position,
         direction=Direction.RL,
         speed=3,
         DML=False,
@@ -90,15 +90,17 @@ def test_2_agents(env):
 def test_2_agents_on_finish(env):
     # create two agents facing each other
 
+    # when agents reach the end of the grid, they should change direction and move back
+    
     expectedGap = 1
     expectedTranslation = expectedGap + 1
     agents = []
 
-    agent1Position = (8,1)
+    agent1Position = (18,1)
     agent1Speed = 3
     agent1 = BlueAdlerPedAgent(
         id=1,
-        position=(18, 1),
+        position=agent1Position,
         direction=Direction.LR,
         maxSpeed=agent1Speed,
         speed=agent1Speed,
@@ -127,15 +129,12 @@ def test_2_agents_on_finish(env):
 
     runSteps(env, 1, close=False)
 
-    assert agent1.position == (1, 1)
-    assert agent2.position == (18, 1)
-
-    agent1Position = agent1.position
-    agent2Position = agent2.position
+    assert agent1.position == (18, 1)
+    assert agent2.position == (1, 1)
 
     runSteps(env, 1)
-    assert agent1.position == (4, 1)
-    assert agent2.position == (15, 1)
+    assert agent1.position == (15, 1)
+    assert agent2.position == (4, 1)
 
 def test_2_agents_exchange_on_finish(env):
     # create two agents facing each other

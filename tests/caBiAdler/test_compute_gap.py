@@ -1,7 +1,7 @@
 import pytest
 from gym_minigrid.lib.Direction import Direction
 from gym_minigrid.agents import BlueAdlerPedAgent
-from gym_minigrid.agents import LaneNum
+from gym_minigrid.agents import Lanes
 
 
 @pytest.mark.xfail()
@@ -30,7 +30,7 @@ def test_game_same_0():
 
     agents = [agent1, agent2]
 
-    gap, gap_same, gap_opposite, agentOppIndex = agent1.computeGap(agents, LaneNum.currentLane)
+    gap, gap_same, gap_opposite, agentOppIndex = agent1.computeGap(agents, Lanes.currentLane)
 
     print(gap, gap_same, gap_opposite, agentOppIndex)
 
