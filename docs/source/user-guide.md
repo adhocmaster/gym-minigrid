@@ -182,7 +182,7 @@ PedGrid utilizes **_Action_** objects with properties _agent_ with the agent ref
 
 **Note:** When a pedestrian agent exceeds the end of the environment during a forward action, they automatically turn around in the opposite direction.
 
-![Action Space](action-space.png)
+![Action Space](visuals/action-space.png)
 
 ## MultiLaneRoadEnv
 
@@ -194,4 +194,6 @@ Remains the same as PedestrianEnv.
 
 **Note:** When a pedestrian agent exceeds the end of the environment during a forward action, they automatically turn around in the opposite direction. Vehicle agents will terminate the simulation when they exceed the end of the environment.
 
-## Tutorial 1 - Simple Pedestrians Moving Forward
+## Tutorial 1 - Simple Pedestrians Moving Forward and Shifting Left/Right
+
+![Tutorial 1 Video](visuals/PedGridTutorial1.mov)

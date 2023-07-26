@@ -11,3 +11,4 @@ from gym_minigrid.agents.Sidewalk import *
 from gym_minigrid.agents.Crosswalk import *
 from gym_minigrid.agents.SimpleVehicle import *
 from gym_minigrid.agents.SimplePedAgent import *
+from gym_minigrid.agents.Tutorial1PedAgent import *
