@@ -180,9 +180,9 @@ PedGrid utilizes **_Action_** objects with properties _agent_ with the agent ref
 * ForwardAction
     * .KEEP: agent moves forward by agent.speed tiles
 
-**Note:** When a pedestrian agent exceeds the end of the environment during a forward action, they automatically turn around in the opposite direction.
-
 ![Action Space](visuals/action-space.png)
+
+**Note:** When a pedestrian agent exceeds the end of the environment during a forward action, they automatically turn around in the opposite direction.
 
 ## MultiLaneRoadEnv
 
@@ -194,6 +194,62 @@ Remains the same as PedestrianEnv.
 
 **Note:** When a pedestrian agent exceeds the end of the environment during a forward action, they automatically turn around in the opposite direction. Vehicle agents will terminate the simulation when they exceed the end of the environment.
 
-## Tutorial 1 - Simple Pedestrians Moving Forward and Shifting Left/Right
+## Tutorials
 
-![Tutorial 1 Video](visuals/PedGridTutorial1.mov)
+### Tutorial 1 - PedestrianEnv
+**Simple Pedestrians Moving Forward and Shifting Left/Right with Equal Probability**
+
+![Tutorial 1 Video](visuals/PedGridTutorial1.gif)
+
+1. Creating the agent and defining behavior - Tutorial1PedAgent.py
+
+```python
+from gym_minigrid.lib.Action import Action
+from gym_minigrid.lib.ForwardAction import ForwardAction
+from gym_minigrid.lib.LaneAction import LaneAction
+from .PedAgent import PedAgent
+import numpy as np
+
+class Tutorial1PedAgent(PedAgent):
+    
+    def parallel1(self, env) -> Action:
+        # raise NotImplementedError("parallel1 is not implemented")
+        return Action(self, ForwardAction.KEEP)
+        # return None
+
+    def parallel2(self, env) -> Action:
+        # raise NotImplementedError("parallel2 is not implemented")
+        return np.random.choice([Action(self, LaneAction.LEFT), Action(self, LaneAction.RIGHT)], p=(0.5, 0.5))
+        # return None
+```
+
+2. Writing the test script - tutorial1.py
+
+```python
+import time
+import logging
+import gym
+import gym_minigrid
+from gym_minigrid.agents import *
+
+env = gym.make('PedestrianEnv-20x80-v0')
+env.reset()
+
+ped = Tutorial1PedAgent(id=1, position=(10, 10), direction=Direction.East, maxSpeed=3, speed=3)
+env.addPedAgent(ped)
+
+for i in range(100):
+
+    obs, reward, done, info = env.step(None)
+    
+    if done:
+        "Reached the goal"
+        break
+
+    env.render()
+
+    if i % 10 == 0:
+        logging.info(f"Completed step {i+1}")
+
+    time.sleep(0.5)
+```
