@@ -191,6 +191,18 @@ PedGrid utilizes **_Action_** objects with properties _agent_ with the agent ref
 
 **Note:** When a pedestrian agent exceeds the end of the environment during a forward action, they automatically turn around in the opposite direction.
 
+Starting State:
+All pedestrian agents are placed at their initial positions.
+
+Episode End:
+The episode ends once the set number of steps has been run.
+
+Arguments:
+```python
+import gym-minigrid
+env = gym.make('[id of your registered PedestrianEnv environment]')
+```
+
 ## MultiLaneRoadEnv
 
 ### Description
@@ -200,6 +212,18 @@ This environment models a grid that wraps PedestrianEnv for behavior simulation 
 Remains the same as PedestrianEnv.
 
 **Note:** When a pedestrian agent exceeds the end of the environment during a forward action, they automatically turn around in the opposite direction. Vehicle agents will terminate the simulation when they exceed the end of the environment.
+
+Starting State:
+All static objects and dynamic agents are placed at their initial positions.
+
+Episode End:
+The episode ends once the set number of steps has been run or if a vehicle moves out of bounds.
+
+Arguments:
+```python
+import gym-minigrid
+env = gym.make('[id of your registered MultiLaneRoadEnv environment]')
+```
 
 ## Tutorials
 
