@@ -14,7 +14,7 @@ from .EnvEvent import EnvEvent
 import logging
 import random
 
-class TwoLaneRoadEnv(PedestrianEnv):
+class MultiLaneRoadEnv(PedestrianEnv):
     # Write the outline here how it should work
 
     # generic object representation
@@ -153,7 +153,7 @@ class TwoLaneRoadEnv(PedestrianEnv):
 
         return img
 
-class TwoLaneRoadEnv60x80(TwoLaneRoadEnv):
+class TwoLaneRoadEnv60x80(MultiLaneRoadEnv):
     def __init__(self):
         width = 60
         height = 80
@@ -218,7 +218,7 @@ class TwoLaneRoadEnv60x80(TwoLaneRoadEnv):
             height=height
         )
 
-class TwoLaneRoadEnv30x80(TwoLaneRoadEnv):
+class TwoLaneRoadEnv30x80(MultiLaneRoadEnv):
     def __init__(self):
         width = 30
         height = 80
@@ -269,7 +269,7 @@ class TwoLaneRoadEnv30x80(TwoLaneRoadEnv):
             height=height
         )
 
-class TwoLaneRoadEnv900x270(TwoLaneRoadEnv):
+class TwoLaneRoadEnv900x270(MultiLaneRoadEnv):
     def __init__(self):
         width = 1000
         height = 300
@@ -305,15 +305,15 @@ class TwoLaneRoadEnv900x270(TwoLaneRoadEnv):
 
 register(
     id='TwoLaneRoadEnv60x80-v0',
-    entry_point='gym_minigrid.envs.pedestrian.TwoLaneRoadEnv:TwoLaneRoadEnv60x80'
+    entry_point='gym_minigrid.envs.pedestrian.MultiLaneRoadEnv:TwoLaneRoadEnv60x80'
 )
 
 register(
     id='TwoLaneRoadEnv30x80-v0',
-    entry_point='gym_minigrid.envs.pedestrian.TwoLaneRoadEnv:TwoLaneRoadEnv30x80'
+    entry_point='gym_minigrid.envs.pedestrian.MultiLaneRoadEnv:TwoLaneRoadEnv30x80'
 )
 
 register(
     id='TwoLaneRoadEnv900x270-v0',
-    entry_point='gym_minigrid.envs.pedestrian.TwoLaneRoadEnv:TwoLaneRoadEnv900x270'
+    entry_point='gym_minigrid.envs.pedestrian.MultiLaneRoadEnv:TwoLaneRoadEnv900x270'
 )

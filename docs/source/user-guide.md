@@ -18,7 +18,7 @@ class PedestrianEnv20x80(PedestrianEnv):
             pedAgents=None
         )
 
-class TwoLaneRoadEnv30x80(TwoLaneRoadEnv):
+class TwoLaneRoadEnv30x80(MultiLaneRoadEnv):
     def __init__(self):
         width = 30
         height = 80
@@ -77,11 +77,18 @@ register(
     id='PedestrianEnv-20x80-v0',
     entry_point='gym_minigrid.envs.pedestrian.PedestrianEnv:PedestrianEnv20x80'
 )
+
+register(
+    id='TwoLaneRoadEnv30x80-v0',
+    entry_point='gym_minigrid.envs.pedestrian.MultiLaneRoadEnv:TwoLaneRoadEnv30x80'
+)
 ```
 
 5. Make the environment with gym in the test script
 ```python
 env = gym.make('PedestrianEnv-20x80-v0')
+
+env = gym.make('TwoLaneRoadEnv30x80-v0')
 ```
 
 In the future, parameters will be incorporated into gym's make function.
@@ -213,12 +220,10 @@ import numpy as np
 class Tutorial1PedAgent(PedAgent):
     
     def parallel1(self, env) -> Action:
-        # raise NotImplementedError("parallel1 is not implemented")
         return Action(self, ForwardAction.KEEP)
         # return None
 
     def parallel2(self, env) -> Action:
-        # raise NotImplementedError("parallel2 is not implemented")
         return np.random.choice([Action(self, LaneAction.LEFT), Action(self, LaneAction.RIGHT)], p=(0.5, 0.5))
         # return None
 ```
