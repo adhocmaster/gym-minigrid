@@ -1,7 +1,7 @@
 from gym_minigrid.lib.Action import Action
 from gym_minigrid.lib.ForwardAction import ForwardAction
 from gym_minigrid.lib.LaneAction import LaneAction
-from .PedAgent import PedAgent
+from gym_minigrid.agents.PedAgent import PedAgent
 import numpy as np
 
 class Tutorial1PedAgent(PedAgent):

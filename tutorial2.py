@@ -6,9 +6,9 @@ import logging
 env = gym.make('TwoLaneRoadEnv30x80-v0')       
 env.reset()
 
-v1 = SimpleVehicle(1, (7, 10), (12, 19), 1, 5, 5, 1, 1)
-v2 = SimpleVehicle(2, (17, 60), (22, 69), 3, 5, 5, 1, 2)
-p1 = Tutorial2PedAgent(ids=1, position=(0, 42), direction=Direction.East, maxSpeed=3, speed = 3)
+v1 = Tutorial2Vehicle(1, (7, 10), (12, 19), 1, 5, 5, 1, 1)
+v2 = Tutorial2Vehicle(2, (17, 60), (22, 69), 3, 5, 5, 1, 2)
+p1 = Tutorial2PedAgent(id=1, position=(0, 42), direction=Direction.East, maxSpeed=3, speed = 3)
 p2 = Tutorial2PedAgent(id=2, position=(29,44), direction=Direction.West, maxSpeed=3, speed = 3)
 p3 = Tutorial2PedAgent(id=3, position=(2,5), direction=Direction.South, maxSpeed=3, speed = 3)
 p4 = Tutorial2PedAgent(id=4, position=(27,74), direction=Direction.North, maxSpeed=3, speed = 3)
@@ -20,7 +20,7 @@ env.addPedAgent(p2)
 env.addPedAgent(p3)
 env.addPedAgent(p4)
 
-for i in range(110):
+for i in range(10):
 
     obs, reward, done, info = env.step(None)
     
