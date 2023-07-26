@@ -58,7 +58,7 @@ class MultiLaneRoadEnv(PedestrianEnv):
     def addVehicleAgent(self, agent: Vehicle):
         self.vehicleAgents.append(agent)
         # subscribe to events here
-        super().subscribe(EnvEvent.stepParallel2, agent.go)
+        super().subscribe(EnvEvent.stepParallel1, agent.parallel1)
 
     def getNumVehicleAgents(self):
         return len(self.vehicleAgents)

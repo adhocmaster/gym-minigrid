@@ -9,7 +9,7 @@ class SimpleVehicle(Vehicle):
     def __init__(self, id, topLeft, bottomRight, direction, maxSpeed, speed, inRoad, inLane):
         super().__init__(id, topLeft, bottomRight, direction, maxSpeed, speed, inRoad, inLane)
     
-    def go(self, env):
+    def parallel1(self, env):
         """
             Simply move forward
         """
