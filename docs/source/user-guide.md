@@ -225,14 +225,33 @@ import gym-minigrid
 env = gym.make('[id of your registered MultiLaneRoadEnv environment]')
 ```
 
-## Tutorials
+## Full Tutorials
 
 ### Tutorial 1 - PedestrianEnv
-**Simple Pedestrians Moving Forward and Shifting Left/Right with Equal Probability**
+**Simple Pedestrian Moving Forward and Shifting Left/Right with Equal Probability**
 
 ![Tutorial 1 Video](visuals/PedGridTutorial1.gif)
 
-1. Creating the agent and defining behavior - Tutorial1PedAgent.py
+1. Defining and registering the environment - PedestrianEnv.py
+
+```python
+class PedestrianEnv20x80(PedestrianEnv):
+    def ___init__(self):
+        width = 80
+        height = 20
+        super().__init__(
+            width=width,
+            height=height,
+            pedAgents=None
+        )
+
+register(
+    id='PedestrianEnv-20x80-v0',
+    entry_point='gym_minigrid.envs.pedestrian.PedestrianEnv:PedestrianEnv20x80'
+)
+```
+
+2. Creating the agent and defining behavior - Tutorial1PedAgent.py
 
 ```python
 from gym_minigrid.lib.Action import Action
@@ -252,7 +271,7 @@ class Tutorial1PedAgent(PedAgent):
         # return None
 ```
 
-2. Writing the test script - tutorial1.py
+3. Writing the test script - tutorial1.py
 
 ```python
 import time
@@ -281,4 +300,101 @@ for i in range(100):
         logging.info(f"Completed step {i+1}")
 
     time.sleep(0.5)
+```
+
+### Tutorial 2 - MultiLaneRoadEnv
+**Two pedestrians and two vehicles moving forward in their respective directions with one crosswalk, two lanes, and two sidewalks**
+
+![Tutorial 2 Video](visuals/PedGridTutorial2.gif)
+
+1. Defining and registering the environment - MultiLaneRoadEnv.py
+
+```python
+class TwoLaneRoadEnv30x80(MultiLaneRoadEnv):
+    def __init__(self):
+        width = 30
+        height = 80
+
+        lane1 = Lane(
+            topLeft=(5, 0),
+            bottomRight=(14, 79),
+            direction=1,
+            inRoad=1,
+            laneID=1,
+            posRelativeToCenter=-1
+        )
+        lane2 = Lane(
+            topLeft=(15, 0),
+            bottomRight=(24, 79),
+            direction=3,
+            inRoad=1,
+            laneID=2,
+            posRelativeToCenter=1
+        )
+        road1 = Road([lane1, lane2], roadID=1)
+
+        sidewalk1 = Sidewalk(
+            topLeft=(0, 0),
+            bottomRight=(4, 79),
+            sidewalkID=1
+        )
+
+        sidewalk2 = Sidewalk(
+            topLeft=(25, 0),
+            bottomRight=(29, 79),
+            sidewalkID=2
+        )
+
+        crosswalk1 = Crosswalk(
+            topLeft=(5, 40),
+            bottomRight=(24, 45),
+            crosswalkID=1,
+            overlapRoad=1,
+            overlapLanes=[1, 2]
+        )
+
+        super().__init__(
+            road=road1,
+            sidewalks=[sidewalk1, sidewalk2],
+            crosswalks=[crosswalk1],
+            width=width,
+            height=height
+        )
+
+register(
+    id='TwoLaneRoadEnv30x80-v0',
+    entry_point='gym_minigrid.envs.pedestrian.MultiLaneRoadEnv:TwoLaneRoadEnv30x80'
+)
+```
+
+2. Creating the agents and defining behavior - Tutorial2PedAgent.py & Tutorial2Vehicle.py
+
+**Tutorial2PedAgent.py**
+```python
+from gym_minigrid.lib.Action import Action
+from gym_minigrid.lib.ForwardAction import ForwardAction
+from gym_minigrid.lib.LaneAction import LaneAction
+from gym_minigrid.agents.PedAgent import PedAgent
+import numpy as np
+
+class Tutorial2PedAgent(PedAgent):
+    
+    def parallel1(self, env) -> Action:
+        return Action(self, ForwardAction.KEEP)
+        # return None
+
+    def parallel2(self, env) -> Action:
+        return None
+```
+
+**Tutorial2Vehicle.py**
+```python
+from gym_minigrid.agents.Vehicle import Vehicle
+from gym_minigrid.lib.Action import Action
+from gym_minigrid.lib.VehicleAction import VehicleAction
+
+class Tutorial2Vehicle(Vehicle):
+    
+    def parallel1(self, env):
+        return Action(self, VehicleAction.KEEP)
 ```
