@@ -8,8 +8,10 @@ from gym_minigrid.envs.pedestrian.PedGrid import PedGrid
 from gym_minigrid.lib.Action import Action
 from gym_minigrid.lib.LaneAction import LaneAction
 from gym_minigrid.lib.ForwardAction import ForwardAction
+from gym_minigrid.lib.PositionAction import PositionAction
 from gym_minigrid.lib.Direction import Direction
 from gym_minigrid.lib.VehicleAction import VehicleAction
+from gym_minigrid.agents.TrajectoryVehicle import TrajectoryVehicle
 from .EnvEvent import EnvEvent
 import logging
 import random
@@ -23,6 +25,7 @@ class TwoLaneRoadEnv(PedestrianEnv):
         self,
         pedAgents: List[PedAgent]=[],
         vehicleAgents: List[Vehicle]=[],
+        trajectoryVehicleAgents: List[TrajectoryVehicle]=[],
         road: Road=None,
         sidewalks: List[Sidewalk]=[],
         crosswalks: List[Crosswalk]=[],
@@ -32,6 +35,7 @@ class TwoLaneRoadEnv(PedestrianEnv):
     ):
         
         self.vehicleAgents = vehicleAgents
+        # self.trajectoryVehicleAgents = trajectoryVehicleAgents
         self.road = road
         self.sidewalks = sidewalks
         self.crosswalks = crosswalks
@@ -43,7 +47,10 @@ class TwoLaneRoadEnv(PedestrianEnv):
             stepsIgnore=stepsIgnore
         )
 
-        self.updateActionHandlers({VehicleAction : self.executeVehicleAction})
+        self.updateActionHandlers({
+            VehicleAction : self.executeVehicleAction,
+            PositionAction: self.executePositionAction
+            })
         # TODO label each tile with either lane/sidewalk?
 
         pass
@@ -59,6 +66,16 @@ class TwoLaneRoadEnv(PedestrianEnv):
         self.vehicleAgents.append(agent)
         # subscribe to events here
         super().subscribe(EnvEvent.stepParallel2, agent.go)
+
+    def addTrajectoryVehicleAgents(self, agents: List[TrajectoryVehicle]):
+        for agent in agents:
+            self.addTrajectoryVehicleAgent(agent)
+
+    def addTrajectoryVehicleAgent(self, agent: TrajectoryVehicle):
+        # self.trajectoryVehicleAgents.append(agent)
+        self.vehicleAgents.append(agent)
+        self.subscribe(EnvEvent.stepParallel1, agent.parallel1) 
+        self.subscribe(EnvEvent.stepParallel2, agent.parallel2)
 
     def getNumVehicleAgents(self):
         return len(self.vehicleAgents)
@@ -104,6 +121,23 @@ class TwoLaneRoadEnv(PedestrianEnv):
             agent.topLeft = newTopLeft
             agent.bottomRight = newBottomRight
 
+    def positionMove(self, agent: Agent):
+        print ("moving position")
+        assert agent.direction >= 0 and agent.direction < 4
+        #Terry - uses the direction to left of agent to find vector to move left
+        # left_dir = agent.direction - 1
+        # if left_dir < 0:
+        #     left_dir += 4
+        # left_pos = agent.position + DIR_TO_VEC[left_dir]
+
+        # agent.position[0] = left_pos
+        step_count=self.step_count
+        newTopLeftx = agent.trajectory[2*step_count]
+        newBottomRightx = agent.bottomRight[0]+(agent.trajectory[2*step_count]-agent.topLeft[0])
+        newTopLefty = agent.trajectory[2*step_count+1]
+        newBottomRighty = agent.bottomRight[1]+(agent.trajectory[2*step_count+1]-agent.topLeft[1])
+        agent.topLeft = (newTopLeftx, newTopLefty)
+        agent.bottomRight = (newBottomRightx, newBottomRighty)
 
     def executeVehicleAction(self, action: Action):
         if action is None:
@@ -114,6 +148,18 @@ class TwoLaneRoadEnv(PedestrianEnv):
         logging.debug(f"forwarding vehicle {agent.id}")
 
         self.forwardVehicle(agent)
+
+    def executePositionAction(self, action: Action):
+        print ("executing position")
+        if action is None:
+            return 
+
+        agent = action.agent
+
+        logging.debug(f"position move vehicle {agent.id}")
+
+        self.positionMove(agent)
+
 
     def render(self, mode='human', close=False, highlight=True, tile_size=TILE_PIXELS):
         """
