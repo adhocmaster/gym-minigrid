@@ -8,7 +8,6 @@ PedGrid is a minimal simulator for autonomous vehicle driving with a visualizati
 Please cite our accepted paper if you use PedGrid or doing relevant research (DOI pending):
 
 ```
-
 @inproceedings{inproceedings,
     author = {Muktadir, Golam Md and Huang, Taorui and Ikram, Zarif and Jawad, Abdul and Whitehead, Jim},
     booktitle = {26th IEEE International Conference on Intelligent Transportation Systems ITSC 2023A (Bilbao, Bizkaia, Spain)}
@@ -22,12 +21,10 @@ We have a seperate website for documentation and tutorials **[here](https://pedg
 
 # Why use PedGrid:
 1. It's open source
-2. Easy to learn (we can get started with research in a week)
+2. Easy to learn: we can get started with research in a week.
 3. Easy to setup: written in python using python packages only. 
-4. Grid-based: maths are easier to handle.
+4. Grid-based: math is easier to handle.
 5. Easy to get metrics: We have a set of commonly used metrics in research. Data is ready for your further analysis.
-
-
 
 ## Install dependencies via Conda
 ```
@@ -39,8 +36,13 @@ conda install matplotlib
 ```
 
 ## First explore the environmments:
-
 ```
 python manual_control.py --env Pedestrian-Empty-9x16-v0
 python manual_control.py --env MultiPedestrian-Empty-9x16-v0
 ```
+
+## PedestrianEnv
+![PedestrianEnv](docs/source/visuals/PedestrianEnv.png)
+
+## TwoLaneRoadEnv (a specific example of MultiLaneRoadEnv)
+![TwoLaneRoadEnv](docs/source/visuals/TwoLaneRoadEnv.png)
