@@ -179,13 +179,13 @@ Suppose stepsToIgnoreAtTheBeginning = 100 and stepsToRecord = 1000; then, the Me
 This environment models a simple grid for behavior simulation involving pedestrians, containing a G<sub>m x n</sub> grid with customizable length m and height n. PedestrianEnv only supports pedestrian agents, or PedAgents. No other static or dynamic objects are supported. Pedestrians may be added or removed any time during simulation.
 
 ### Action Space
-PedGrid utilizes **_Action_** objects with properties _agent_ with the agent reference and _action_ as an enum. Currently, there are two enum classes defining dynamic agent movement.
+PedGrid utilizes **_Action_** objects with properties _agent_ with the agent reference and _action_ as an enum. Two enum classes define dynamic agent movement in PedestrianEnv.
 * LaneAction
     * .KEEP: agent keeps the current lane
     * .LEFT: agent shifts a tile to the left
     * .RIGHT: agent shifts a tile to the right
 * ForwardAction
-    * .KEEP: agent moves forward by agent.speed tiles
+    * .KEEP: pedestrian agent moves forward by agent.speed tiles
 
 ![Action Space](visuals/action-space.png)
 
@@ -210,6 +210,16 @@ This environment models a grid that wraps PedestrianEnv for behavior simulation 
 
 ### Action Space
 Remains the same as PedestrianEnv, with the exception of VehicleAction.KEEP.
+
+PedGrid utilizes **_Action_** objects with properties _agent_ with the agent reference and _action_ as an enum. Three enum classes define dynamic agent movement in MultiLaneRoadEnv.
+* LaneAction
+    * .KEEP: agent keeps the current lane
+    * .LEFT: agent shifts a tile to the left
+    * .RIGHT: agent shifts a tile to the right
+* ForwardAction
+    * .KEEP: pedestrian agent moves forward by agent.speed tiles
+* VehicleAction
+    * .KEEP: vehicle agent moves forward by agent.speed tiles
 
 **Note:** When a pedestrian agent exceeds the end of the environment during a forward action, they automatically turn around in the opposite direction. Vehicle agents will terminate the simulation when they exceed the end of the environment.
 
