@@ -10,7 +10,7 @@ Please cite our accepted paper if you use PedGrid or doing relevant research (DO
 ```
 @inproceedings{inproceedings,
     author = {Muktadir, Golam Md and Huang, Taorui and Ikram, Zarif and Jawad, Abdul and Whitehead, Jim},
-    booktitle = {26th IEEE International Conference on Intelligent Transportation Systems ITSC 2023A (Bilbao, Bizkaia, Spain)}
+    booktitle = {26th IEEE International Conference on Intelligent Transportation Systems ITSC 2023 (Bilbao, Bizkaia, Spain)}
     year = {2023},
     title = {PedGrid - A Simple yet Expressive Simulation Environment for Pedestrian Behavior Modeling}
 }

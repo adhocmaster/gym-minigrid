@@ -1,9 +1,10 @@
 # Installation Guide
 
-Dependencies:
-  - python=3.8.13
-  - matplotlib
-  - gym=0.21.0
-  - jupyterlab
-  - pytest
-  - seaborn
+## Install dependencies via Conda
+```python
+conda config --append channels conda-forge
+conda create -n pedgrid python=3.18.13
+conda activate pedgrid
+conda install gym=0.21
+conda install matplotlib
+```
