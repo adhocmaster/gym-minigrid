@@ -1,6 +1,6 @@
 # Installation Guide
 
-## Install dependencies via Conda
+## Install Dependencies via Conda
 ```python
 conda config --append channels conda-forge
 conda create -n pedgrid python=3.18.13
