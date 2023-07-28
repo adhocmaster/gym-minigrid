@@ -209,8 +209,6 @@ env = gym.make('[id of your registered PedestrianEnv environment]')
 This environment models a grid that wraps PedestrianEnv for behavior simulation involving both pedestrians and vehicles. MultiLaneRoadEnv supports pedestrians and vehicles as dynamic agents and sidewalks, crosswalks, and one road with multiple lanes as static objects. Dynamic agents may be added or removed any time during simulation; however, static objects are not designed to be removed.
 
 ### Action Space
-Remains the same as PedestrianEnv, with the exception of VehicleAction.KEEP.
-
 PedGrid utilizes **_Action_** objects with properties _agent_ with the agent reference and _action_ as an enum. Three enum classes define dynamic agent movement in MultiLaneRoadEnv.
 * LaneAction
     * .KEEP: agent keeps the current lane
