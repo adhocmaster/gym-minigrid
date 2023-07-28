@@ -224,7 +224,7 @@ PedGrid utilizes **_Action_** objects with properties _agent_ with the agent ref
 **Note:** When a pedestrian agent exceeds the end of the environment during a forward action, they automatically turn around in the opposite direction. Vehicle agents will terminate the simulation when they exceed the end of the environment.
 
 Starting State:
-All static objects and dynamic agents are placed at their initial positions.
+All static objects are put in place and dynamic agents are placed at their initial positions.
 
 Episode End:
 The episode ends once the set number of steps has been run or if a vehicle moves out of bounds.
