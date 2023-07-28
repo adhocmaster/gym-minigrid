@@ -235,7 +235,7 @@ import gym-minigrid
 env = gym.make('[id of your registered MultiLaneRoadEnv environment]')
 ```
 
-## Full Tutorials
+## Tutorials
 
 ### Tutorial 1 - PedestrianEnv
 **Simple Pedestrian Moving Forward and Shifting Left/Right with Equal Probability**
