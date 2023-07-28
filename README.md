@@ -44,5 +44,5 @@ python manual_control.py --env MultiPedestrian-Empty-9x16-v0
 ## PedestrianEnv
 ![PedestrianEnv](docs/source/visuals/PedestrianEnv.png)
 
-## TwoLaneRoadEnv (a specific example of MultiLaneRoadEnv)
+## TwoLaneRoadEnv (an example of MultiLaneRoadEnv)
 ![TwoLaneRoadEnv](docs/source/visuals/TwoLaneRoadEnv.png)
