@@ -190,3 +190,4 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+docs/source/.DS_Store
