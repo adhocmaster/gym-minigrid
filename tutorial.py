@@ -6,7 +6,7 @@ from gym_minigrid.lib.Direction import Direction
 import time
 
 # Load the gym environment
-env = gym.make('MultiPedestrian-Empty-5x20-v0')
+env = gym.make('TwoLaneRoadEnv30x80-v0')
 env.reset()
 
 # create your actors. Each actor needs some configuration
@@ -20,7 +20,7 @@ firstPed = BlueAdlerPedAgent(
 
 secondPed = TutorialPedAgent (
                     id=2,
-                    position=(0,1),
+                    position=(0,15),
                     direction=Direction.West,
 
 )
