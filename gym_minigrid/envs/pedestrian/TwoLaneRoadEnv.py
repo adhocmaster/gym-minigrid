@@ -25,7 +25,6 @@ class TwoLaneRoadEnv(PedestrianEnv):
         self,
         pedAgents: List[PedAgent]=[],
         vehicleAgents: List[Vehicle]=[],
-        trajectoryVehicleAgents: List[TrajectoryVehicle]=[],
         road: Road=None,
         sidewalks: List[Sidewalk]=[],
         crosswalks: List[Crosswalk]=[],
@@ -65,15 +64,6 @@ class TwoLaneRoadEnv(PedestrianEnv):
     def addVehicleAgent(self, agent: Vehicle):
         self.vehicleAgents.append(agent)
         # subscribe to events here
-        super().subscribe(EnvEvent.stepParallel2, agent.go)
-
-    def addTrajectoryVehicleAgents(self, agents: List[TrajectoryVehicle]):
-        for agent in agents:
-            self.addTrajectoryVehicleAgent(agent)
-
-    def addTrajectoryVehicleAgent(self, agent: TrajectoryVehicle):
-        # self.trajectoryVehicleAgents.append(agent)
-        self.vehicleAgents.append(agent)
         self.subscribe(EnvEvent.stepParallel1, agent.parallel1) 
         self.subscribe(EnvEvent.stepParallel2, agent.parallel2)
 

@@ -14,7 +14,7 @@ vehicle1 = TrajectoryVehicle(
     id=1,
     topLeft=(10, 10),
     bottomRight=(15, 20),
-    trajectory=[10, 10, 12, 12, 14, 14, 16, 16, 20, 20, 22, 22], #coordinates of topLeft corner, without parathenses, it should move diagonally
+    trajectory=(12, 12, 14, 14, 16, 16, 18, 18, 20, 20),
     direction=2,
     maxSpeed=1.0,
     speed=0.5,
@@ -22,10 +22,7 @@ vehicle1 = TrajectoryVehicle(
     inLane=1,
 )
 
-#v2 = SimpleVehicle(1, (14, 20), (20, 29), 1, 5, 5, 1, 1)
-
-env.addTrajectoryVehicleAgent(vehicle1)
-#env.addVehicleAgent(v2)
+env.addVehicleAgent(vehicle1)
 
 
 #Move the vehicle along the trajectory

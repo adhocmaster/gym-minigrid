@@ -21,7 +21,6 @@ class TrajectoryVehicle(Vehicle):
         speed: float,
         inRoad: int,
         inLane: int,
-        objectType="Vehicle"
         ):
             super().__init__(
                 inRoad=int,
@@ -31,8 +30,7 @@ class TrajectoryVehicle(Vehicle):
                 bottomRight=bottomRight,
                 direction=direction,
                 maxSpeed=maxSpeed,
-                speed=speed,
-                objectType=objectType
+                speed=speed
             )
         
             self.inRoad = inRoad
