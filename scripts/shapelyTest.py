@@ -1,3 +1,5 @@
+exec(open("sys_path_hack.py").read())
+
 import pdb
 
 import sys
@@ -35,9 +37,9 @@ XCar2, YCar2 = 22, 77
 #XCar3, YCar3 = np.random.randint(10, 30), np.random.randint(10, 30)
 #XCar4, YCar4 = np.random.randint(10, 30), np.random.randint(60, 80)
 Car = MultiPolygon([box(XCar1, YCar1 , XCar1+10, YCar1+20), box(XCar2, YCar2 , XCar2+10, YCar2+20)])
-x, y = Car[0].exterior.xy
+x, y = Car.geoms[0].exterior.xy
 plt.plot(x, y, color="blue", alpha=0.5)
-x, y = Car[1].exterior.xy
+x, y = Car.geoms[1].exterior.xy
 plt.plot(x, y, color="blue", alpha=0.5)
 
 print(Car)
@@ -49,7 +51,7 @@ plt.plot(x, y, color="blue", alpha=0.5)
 '''
 
 
-def create_occupancy_grid(agentLocation: 'tuple[int]', gridSize: 'list[int, int]', objects: any) -> 'list[list[float]]':
+def create_occupancy_grid(agentLocation: 'tuple[int]', gridSize: 'list[int, int]', objects: MultiPolygon) -> 'list[list[float]]':
     
     occupation_grid= []
 
@@ -69,7 +71,7 @@ def create_occupancy_grid(agentLocation: 'tuple[int]', gridSize: 'list[int, int]
         occupation_grid.append(0.0)
 
     #this is the main part of the function here we iterate through each object draw appropriate lines and create a polygon representing the blind spot
-    for i in range(len(objects)):
+    for i in range(len(objects.geoms)):
 
         exterior_ring1 = objects.geoms[i].exterior
         vertices_coords1 = list(exterior_ring1.coords)        
