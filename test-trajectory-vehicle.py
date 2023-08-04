@@ -7,7 +7,7 @@ from gym_minigrid.agents.SimpleVehicle import SimpleVehicle
 from gym_minigrid.lib.Direction import Direction
 import time
 
-env = gym.make("TwoLaneRoadEnv60x80-v0")
+env = gym.make("EnvGrid100x100-v0")
 env.reset()
 
 vehicle1 = TrajectoryVehicle(
