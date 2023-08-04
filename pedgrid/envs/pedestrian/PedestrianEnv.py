@@ -8,6 +8,7 @@ from pedgrid.envs.pedestrian.PedGrid import PedGrid
 from pedgrid.lib.Action import Action
 from pedgrid.lib.LaneAction import LaneAction
 from pedgrid.lib.VehicleAction import VehicleAction
+from pedgrid.lib.PositionAction import PositionAction
 from pedgrid.lib.Direction import Direction
 from .EnvEvent import EnvEvent
 import logging

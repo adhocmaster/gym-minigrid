@@ -1,11 +1,11 @@
 import gym
-import gym_minigrid
+import pedgrid
 from typing import Tuple
-from gym_minigrid.agents.Agent import Agent
-from gym_minigrid.agents.Vehicle import Vehicle
-from gym_minigrid.lib.Action import Action
-from gym_minigrid.lib.PositionAction import PositionAction
-from gym_minigrid.rendering import fill_coords, point_in_line, point_in_rect
+from pedgrid.agents.Agent import Agent
+from pedgrid.agents.Vehicle import Vehicle
+from pedgrid.lib.Action import Action
+from pedgrid.lib.PositionAction import PositionAction
+from pedgrid.rendering import fill_coords, point_in_line, point_in_rect
 
 
 

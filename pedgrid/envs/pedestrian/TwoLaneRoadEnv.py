@@ -45,6 +45,7 @@ class TwoLaneRoadEnv(PedestrianEnv):
             VehicleAction : self.executeVehicleAction,
             PositionAction: self.executePositionAction
             })
+        print(self._actionHandlers)
         # TODO label each tile with either lane/sidewalk?
 
         pass

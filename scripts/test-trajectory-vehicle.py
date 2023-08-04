@@ -1,10 +1,12 @@
-import gym
-import gym_minigrid
+exec(open("sys_path_hack.py").read())
 
-from gym_minigrid.agents import Vehicle
-from gym_minigrid.agents.TrajectoryVehicle import TrajectoryVehicle
-from gym_minigrid.agents.SimpleVehicle import SimpleVehicle
-from gym_minigrid.lib.Direction import Direction
+import gym
+import pedgrid
+
+from pedgrid.agents import Vehicle
+from pedgrid.agents.TrajectoryVehicle import TrajectoryVehicle
+from pedgrid.agents.SimpleVehicle import SimpleVehicle
+from pedgrid.lib.Direction import Direction
 import time
 
 env = gym.make("TwoLaneRoadEnv60x80-v0")
