@@ -1,12 +1,12 @@
 from typing import List
 from pedgrid.agents.Vehicle import Vehicle
+from pedgrid.lib.ObjectAction import ObjectAction
 from pedgrid.minigrid import *
 from pedgrid.register import register
 from pedgrid.agents import Agent, PedActions, PedAgent
 from pedgrid.envs.pedestrian.PedGrid import PedGrid
 from pedgrid.lib.Action import Action
 from pedgrid.lib.LaneAction import LaneAction
-from pedgrid.lib.ForwardAction import ForwardAction
 from pedgrid.lib.VehicleAction import VehicleAction
 from pedgrid.lib.Direction import Direction
 from .EnvEvent import EnvEvent
@@ -54,7 +54,7 @@ class PedestrianEnv(MiniGridEnv):
         
         self._actionHandlers = {
             LaneAction: self.executeLaneAction,
-            ForwardAction: self.executeForwardAction
+            ObjectAction: self.executeObjectAction
         }
 
     pass
@@ -336,9 +336,6 @@ class PedestrianEnv(MiniGridEnv):
         if envEvent == EnvEvent.stepParallel2: 
             return [handler(self) for handler in self.stepParallel2]
 
-
-    
-
     def step(self, action=None):
         """This step is tightly coupled with the research, how can we decouple it?
 
@@ -393,6 +390,16 @@ class PedestrianEnv(MiniGridEnv):
             self.shiftRight(action.agent)
         pass
     
+    def executeObjectAction(self, action: Action):
+        if action is None:
+            return
+
+        if action is ObjectAction.FORWARD:
+            self.executeForwardAction(self, action)
+       # elif action is ObjectAction.MOVETO:
+       #     self.executeMoveToAction(self, action)
+
+        
     def executeForwardAction(self, action: Action):
         if action is None:
             return 

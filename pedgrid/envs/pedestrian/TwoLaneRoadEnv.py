@@ -4,15 +4,11 @@ from typing import List
 from pedgrid.minigrid import *
 from pedgrid.register import register
 from pedgrid.agents import *
-from pedgrid.envs.pedestrian.PedGrid import PedGrid
 from pedgrid.lib.Action import Action
-from pedgrid.lib.LaneAction import LaneAction
-from pedgrid.lib.ForwardAction import ForwardAction
 from pedgrid.lib.Direction import Direction
 from pedgrid.lib.VehicleAction import VehicleAction
 from .EnvEvent import EnvEvent
 import logging
-import random
 
 class TwoLaneRoadEnv(PedestrianEnv):
     # Write the outline here how it should work

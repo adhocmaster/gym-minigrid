@@ -5,11 +5,11 @@ import numpy as np
 import math
 
 from pedgrid.agents import LaneNum
+from pedgrid.lib.ObjectAction import ObjectAction
 
 from .PedAgent import PedAgent
 from pedgrid.lib.LaneAction import LaneAction
 from pedgrid.lib.Action import Action
-from pedgrid.lib.ForwardAction import ForwardAction
 from pedgrid.lib.Direction import Direction
 
 class SimplePedAgent(PedAgent):
@@ -23,7 +23,7 @@ class SimplePedAgent(PedAgent):
         """
             Simply move forward
         """
-        return Action(self, ForwardAction.KEEP)
+        return Action(self, ObjectAction.FORWARD)
     
     def parallel2(self, env):
         pass
