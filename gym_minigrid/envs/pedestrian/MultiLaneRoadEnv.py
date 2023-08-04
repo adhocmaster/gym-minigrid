@@ -8,8 +8,10 @@ from gym_minigrid.envs.pedestrian.PedGrid import PedGrid
 from gym_minigrid.lib.Action import Action
 from gym_minigrid.lib.LaneAction import LaneAction
 from gym_minigrid.lib.ForwardAction import ForwardAction
+from gym_minigrid.lib.SingleActions import SingleActions
 from gym_minigrid.lib.Direction import Direction
 from gym_minigrid.lib.VehicleAction import VehicleAction
+from gym_minigrid.agents.OwnAgents import TrajectoryVehicle
 from .EnvEvent import EnvEvent
 import logging
 import random
@@ -43,7 +45,10 @@ class MultiLaneRoadEnv(PedestrianEnv):
             stepsIgnore=stepsIgnore
         )
 
-        self.updateActionHandlers({VehicleAction : self.executeVehicleAction})
+        self.updateActionHandlers({
+            VehicleAction : self.executeVehicleAction,
+            SingleActions: self.executePositionAction
+            })
         # TODO label each tile with either lane/sidewalk?
 
         pass
@@ -59,6 +64,16 @@ class MultiLaneRoadEnv(PedestrianEnv):
         self.vehicleAgents.append(agent)
         # subscribe to events here
         super().subscribe(EnvEvent.stepParallel1, agent.parallel1)
+
+    def addTrajectoryVehicleAgents(self, agents: List[TrajectoryVehicle]):
+        for agent in agents:
+            self.addTrajectoryVehicleAgent(agent)
+
+    def addTrajectoryVehicleAgent(self, agent: TrajectoryVehicle):
+        # self.trajectoryVehicleAgents.append(agent)
+        self.vehicleAgents.append(agent)
+        self.subscribe(EnvEvent.stepParallel1, agent.parallel1) 
+        self.subscribe(EnvEvent.stepParallel2, agent.parallel2)
 
     def getNumVehicleAgents(self):
         return len(self.vehicleAgents)
@@ -104,7 +119,25 @@ class MultiLaneRoadEnv(PedestrianEnv):
             agent.topLeft = newTopLeft
             agent.bottomRight = newBottomRight
 
+    def positionMove(self, agent: Agent):
+        print ("moving position")
+        assert agent.direction >= 0 and agent.direction < 4
+        #Terry - uses the direction to left of agent to find vector to move left
+        # left_dir = agent.direction - 1
+        # if left_dir < 0:
+        #     left_dir += 4
+        # left_pos = agent.position + DIR_TO_VEC[left_dir]
 
+        # agent.position[0] = left_pos
+        step_count=self.step_count
+        nextPoint=agent.trajectory[step_count]
+        newTopLeftx = nextPoint[0]
+        newBottomRightx = agent.bottomRight[0]+(nextPoint[0]-agent.topLeft[0])
+        newTopLefty = nextPoint[1]
+        newBottomRighty = agent.bottomRight[1]+(nextPoint[1]-agent.topLeft[1])
+        agent.topLeft = (newTopLeftx, newTopLefty)
+        agent.bottomRight = (newBottomRightx, newBottomRighty)
+    
     def executeVehicleAction(self, action: Action):
         if action is None:
             return 
@@ -114,6 +147,17 @@ class MultiLaneRoadEnv(PedestrianEnv):
         logging.debug(f"forwarding vehicle {agent.id}")
 
         self.forwardVehicle(agent)
+    
+    def executePositionAction(self, action: Action):
+        print ("executing position")
+        if action is None:
+            return 
+
+        agent = action.agent
+
+        logging.debug(f"position move vehicle {agent.id}")
+
+        self.positionMove(agent)
 
     def render(self, mode='human', close=False, highlight=True, tile_size=TILE_PIXELS):
         """
