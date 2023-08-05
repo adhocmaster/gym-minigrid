@@ -1,0 +1,12 @@
+name: pedgrid
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - jupyterlab
+  - pytest
+  - matplotlib
+  - seaborn
+  - gym=0.21.0
+  - shapely
+prefix: C:\Users\adhocmaster\anaconda3\envs\pedgrid

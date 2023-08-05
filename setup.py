@@ -12,20 +12,21 @@ with open("README.md") as fh:
             break
 
 setup(
-    name='gym_minigrid',
-    author="Farama Foundation",
-    author_email="jkterry@farama.org",
+    name='pedgrid',
+    author="Golam Md Muktadir, Taorui Huang",
+    author_email="muktadir@ucsc.edu",
     version='1.0.2',
     keywords='memory, environment, agent, rl, gym',
-    url='https://github.com/Farama-Foundation/gym-minigrid',
-    description='Minimalistic gridworld reinforcement learning environments',
-    packages=['gym_minigrid', 'gym_minigrid.envs'],
+    url='https://github.com/adhocmaster/gym-minigrid',
+    description='Minimalistic gridworld reinforcement learning environments for pedestrian behavior modeling',
+    packages=['pedgrid', 'pedgrid.envs'],
     long_description=long_description,
     python_requires=">=3.7, <3.11",
     long_description_content_type="text/markdown",
     install_requires=[
         'gym>=0.24.0',
-        "numpy>=1.18.0"
+        "numpy>=1.18.0",
+        "shapely>=2.0.0"
     ],
     classifiers=[
     "Development Status :: 5 - Production/Stable",
