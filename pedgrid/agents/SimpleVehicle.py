@@ -14,3 +14,9 @@ class SimpleVehicle(Vehicle):
             Simply move forward
         """
         return Action(self, VehicleAction.FORWARD)
+    
+    def parallel2(self, env):
+        """
+            Simply move forward
+        """
+        return None

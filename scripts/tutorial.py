@@ -1,4 +1,4 @@
-exec(open("scripts/sys_path_hack.py").read())
+exec(open("sys_path_hack.py").read())
 import gym
 import pedgrid
 from pedgrid.agents import BlueAdlerPedAgent, SimpleVehicle
