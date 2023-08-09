@@ -1,3 +1,4 @@
+from pedgrid.agents.ControllablePedAgent import ControllablePedAgent
 from pedgrid.agents.PedAgent import PedAgent
 from pedgrid.agents.SimplePedAgent import SimplePedAgent
 from pedgrid.agents.TrajectoryVehicle import TrajectoryVehicle
@@ -5,6 +6,7 @@ from pedgrid.agents.Vehicle import Vehicle
 from pedgrid.envs.pedestrian.MultiLaneRoadEnv import MultiLaneRoadEnv
 from pedgrid.envs.pedestrian.PedestrianEnv import PedestrianEnv
 from pedgrid.envs.tasks.TaskEnv import TaskEnv
+from pedgrid.lib import LaneAction, ObjectAction
 from pedgrid.lib.Direction import Direction
 from pedgrid.objects import *
 from typing import *
@@ -20,11 +22,11 @@ class TaskOccludedVehicle(TaskEnv):
         # todo, create our vehicle and obsticle
         # todo, the pedestrian object will be created by the research itself.
 
-        pedAgent = self.createPedestrian()
+        self.pedAgent = self.createPedestrian()
         vehicleAgent = self.createVehicle(env)
         objects = self.createObjects(env)
 
-        agents = [pedAgent, vehicleAgent]
+        agents = [self.pedAgent, vehicleAgent]
 
         super().__init__(
             env=env,
@@ -33,14 +35,14 @@ class TaskOccludedVehicle(TaskEnv):
         )
         pass
 
-    def createPedestrian(self, env: MultiLaneRoadEnv) -> SimplePedAgent:
+    def createPedestrian(self, env: MultiLaneRoadEnv) -> ControllablePedAgent:
         # set the position of the pedestrian to a predefined position
         # add it to the environment.
-        ped = SimplePedAgent(
+        ped = ControllablePedAgent(
             id=1,
             position=(15, 40),
             direction=Direction.RIGHT,
-            maxSpeed=1,
+            maxSpeed=2,
             speed=1
             
         )
@@ -122,8 +124,34 @@ class TaskOccludedVehicle(TaskEnv):
             stepsIgnore=100
         )
 
+
+    def step(self, action: int):
+
+        # todo, modify 
+
+        if action == 0:
+            self.pedAgent.setNextParallel1(ObjectAction.FORWARD)
+
+        if action == 1:
+            self.pedAgent.setNextParallel1(LaneAction.LEFT)
+
+        if action == 2:
+            self.pedAgent.setNextParallel1(LaneAction.RIGHT)
+
+        obs, reward, done, info = super().step()
+
+        pass
+
+    def getActions() -> dict:
+        return {
+            "Forward": 0,
+            "Left": 1,
+            "Right": 2,
+            "None": 3
+        }
+
         
 register(
-    id='EnvGrid100x100-v0',
+    id='TaskOccludedVehicle-v0',
     entry_point='gym_minigrid.envs.pedestrian.TaskOccludedVehicle:TaskOccludedVehicle'
 )
