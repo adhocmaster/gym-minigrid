@@ -1,7 +1,9 @@
 import numpy as np
+from pedgrid.lib import ObjectColors
 from pedgrid.minigrid import Grid, TILE_PIXELS
 from typing import List
 from pedgrid.agents import *
+from pedgrid.objects import *
 from pedgrid.rendering import *
 import logging
 

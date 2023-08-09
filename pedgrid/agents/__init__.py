@@ -8,3 +8,4 @@ from pedgrid.agents.SimpleVehicle import *
 from pedgrid.agents.SimplePedAgent import *
 from pedgrid.agents.Tutorials import *
 from pedgrid.agents.ControllablePedAgent import *
+from pedgrid.agents.TrajectoryVehicle import TrajectoryVehicle

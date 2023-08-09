@@ -4,7 +4,8 @@ from typing import Tuple, List
 import numpy as np
 import math
 
-from pedgrid.agents import LaneNum
+from pedgrid.objects import LaneNum
+
 
 from .PedAgent import PedAgent
 from pedgrid.lib.LaneAction import LaneAction

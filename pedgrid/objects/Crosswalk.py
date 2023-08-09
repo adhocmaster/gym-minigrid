@@ -1,7 +1,6 @@
 from typing import Tuple, List
 from pedgrid.objects.BaseObject import BaseObject
 from pedgrid.lib.Direction import Direction
-from .Vehicle import Vehicle
 import numpy as np
 
 class Crosswalk(BaseObject):
@@ -24,12 +23,12 @@ class Crosswalk(BaseObject):
         self.overlapRoad = overlapRoad
         self.overlapLanes = overlapLanes
         
-        self.lastVehiclesCrossed = np.empty(len(self.overlapLanes), Vehicle)
-        self.incomingVehicles = np.empty(len(self.overlapLanes), Vehicle)
+        self.lastVehiclesCrossed = np.empty(len(self.overlapLanes), BaseObject)
+        self.incomingVehicles = np.empty(len(self.overlapLanes), BaseObject)
 
     def updateIncomingVehicles(self, env):
         # first reset previous incoming vehicles
-        self.incomingVehicles = np.empty(len(self.overlapLanes), Vehicle)
+        self.incomingVehicles = np.empty(len(self.overlapLanes), BaseObject)
         
         # calculate based on lane ID and direction
         vehicleAgents = env.vehicleAgents

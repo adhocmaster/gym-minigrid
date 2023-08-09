@@ -1,4 +1,4 @@
-from pedgrid.agents.TrajectoryVehicle import TrajectoryVehicle
+from pedgrid.agents import TrajectoryVehicle
 from pedgrid.lib import PositionAction
 from pedgrid.objects import *
 from .PedestrianEnv import PedestrianEnv
@@ -30,14 +30,14 @@ class MultiLaneRoadEnv(PedestrianEnv):
         stepsIgnore = 100
     ):
         
-        self.vehicleAgents = vehicleAgents
+        self.vehicleAgents = vehicleAgents if vehicleAgents is not None else []
         # self.trajectoryVehicleAgents = trajectoryVehicleAgents
         self.road = road
         self.sidewalks = sidewalks
         self.crosswalks = crosswalks
         
         super().__init__(
-            pedAgents=pedAgents,
+            pedAgents=pedAgents if pedAgents is not None else [],
             width=width,
             height=height,
             stepsIgnore=stepsIgnore

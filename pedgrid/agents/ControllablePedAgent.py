@@ -1,16 +1,9 @@
-import logging
-from typing import Tuple, List
-
 import numpy as np
-import math
 
-from pedgrid.agents import LaneNum
 from pedgrid.lib.ObjectAction import ObjectAction
 
 from .PedAgent import PedAgent
-from pedgrid.lib.LaneAction import LaneAction
 from pedgrid.lib.Action import Action
-from pedgrid.lib.Direction import Direction
 
 class ControllablePedAgent(PedAgent):
     """
