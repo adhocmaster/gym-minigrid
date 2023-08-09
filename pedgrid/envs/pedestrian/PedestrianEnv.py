@@ -356,7 +356,6 @@ class PedestrianEnv(MiniGridEnv):
         self.eliminateConflict()
 
         actions = self.emitEventAndGetResponse(EnvEvent.stepParallel1)
-        
         self.executeActions(actions)
         actions = self.emitEventAndGetResponse(EnvEvent.stepParallel2)
         self.executeActions(actions)
@@ -394,9 +393,9 @@ class PedestrianEnv(MiniGridEnv):
     def executeObjectAction(self, action: Action):
         if action is None:
             return
-
-        if action is ObjectAction.FORWARD:
-            self.executeForwardAction(self, action)
+        
+        if action.action is ObjectAction.FORWARD:
+            self.executeForwardAction(action)
        # elif action is ObjectAction.MOVETO:
        #     self.executeMoveToAction(self, action)
 

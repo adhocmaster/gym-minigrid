@@ -11,3 +11,4 @@ from pedgrid.agents.Sidewalk import *
 from pedgrid.agents.Crosswalk import *
 from pedgrid.agents.SimpleVehicle import *
 from pedgrid.agents.SimplePedAgent import *
+from pedgrid.agents.Tutorials import *

@@ -60,12 +60,9 @@ class MultiLaneRoadEnv(PedestrianEnv):
     def addVehicleAgent(self, agent: Vehicle):
         self.vehicleAgents.append(agent)
         # subscribe to events here
-<<<<<<<< HEAD:pedgrid/envs/pedestrian/MultiLaneRoadEnv.py
         super().subscribe(EnvEvent.stepParallel1, agent.parallel1)
-========
         self.subscribe(EnvEvent.stepParallel1, agent.parallel1) 
         self.subscribe(EnvEvent.stepParallel2, agent.parallel2)
->>>>>>>> ped-grid-master:pedgrid/envs/pedestrian/TwoLaneRoadEnv.py
 
     def getNumVehicleAgents(self):
         return len(self.vehicleAgents)
@@ -83,7 +80,7 @@ class MultiLaneRoadEnv(PedestrianEnv):
         if agent in self.vehicleAgents:
             # unsubscribe to events here
             self.vehicleAgents.remove(agent)
-            super().unsubscribe(EnvEvent.stepParallel2, agent.go)
+            super().unsubscribe(EnvEvent.stepParallel1, agent.parallel1)
         else:
             logging.warn("Agent not in list")
     
@@ -341,27 +338,15 @@ class TwoLaneRoadEnv900x270(MultiLaneRoadEnv):
 
 register(
     id='TwoLaneRoadEnv60x80-v0',
-<<<<<<<< HEAD:pedgrid/envs/pedestrian/MultiLaneRoadEnv.py
-    entry_point='gym_minigrid.envs.pedestrian.MultiLaneRoadEnv:TwoLaneRoadEnv60x80'
-========
-    entry_point='pedgrid.envs.pedestrian.TwoLaneRoadEnv:TwoLaneRoadEnv60x80'
->>>>>>>> ped-grid-master:pedgrid/envs/pedestrian/TwoLaneRoadEnv.py
+    entry_point='pedgrid.envs.pedestrian.MultiLaneRoadEnv:TwoLaneRoadEnv60x80'
 )
 
 register(
     id='TwoLaneRoadEnv30x80-v0',
-<<<<<<<< HEAD:pedgrid/envs/pedestrian/MultiLaneRoadEnv.py
-    entry_point='gym_minigrid.envs.pedestrian.MultiLaneRoadEnv:TwoLaneRoadEnv30x80'
-========
-    entry_point='pedgrid.envs.pedestrian.TwoLaneRoadEnv:TwoLaneRoadEnv30x80'
->>>>>>>> ped-grid-master:pedgrid/envs/pedestrian/TwoLaneRoadEnv.py
+    entry_point='pedgrid.envs.pedestrian.MultiLaneRoadEnv:TwoLaneRoadEnv30x80'
 )
 
 register(
     id='TwoLaneRoadEnv900x270-v0',
-<<<<<<<< HEAD:pedgrid/envs/pedestrian/MultiLaneRoadEnv.py
-    entry_point='gym_minigrid.envs.pedestrian.MultiLaneRoadEnv:TwoLaneRoadEnv900x270'
-========
-    entry_point='pedgrid.envs.pedestrian.TwoLaneRoadEnv:TwoLaneRoadEnv900x270'
->>>>>>>> ped-grid-master:pedgrid/envs/pedestrian/TwoLaneRoadEnv.py
+    entry_point='pedgrid.envs.pedestrian.MultiLaneRoadEnv:TwoLaneRoadEnv900x270'
 )

@@ -1,13 +1,13 @@
-from gym_minigrid.lib.Action import Action
-from gym_minigrid.lib.ForwardAction import ForwardAction
-from gym_minigrid.lib.LaneAction import LaneAction
-from gym_minigrid.agents.PedAgent import PedAgent
+from pedgrid.lib.Action import Action
+from pedgrid.lib.ObjectAction import ObjectAction
+from pedgrid.lib.LaneAction import LaneAction
+from pedgrid.agents.PedAgent import PedAgent
 import numpy as np
 
 class Tutorial1PedAgent(PedAgent):
     
     def parallel1(self, env) -> Action:
-        return Action(self, ForwardAction.KEEP)
+        return Action(self, ObjectAction.FORWARD)
         # return None
 
     def parallel2(self, env) -> Action:

@@ -13,4 +13,4 @@ class SimpleVehicle(Vehicle):
         """
             Simply move forward
         """
-        return Action(self, VehicleAction.KEEP)
+        return Action(self, VehicleAction.FORWARD)
