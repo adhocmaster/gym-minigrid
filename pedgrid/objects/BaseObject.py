@@ -1,5 +1,5 @@
 from typing import Tuple, List
-from .ObjectColors import ObjectColors
+from ..lib.ObjectColors import ObjectColors
 from pedgrid.rendering import *
 
 class BaseObject:

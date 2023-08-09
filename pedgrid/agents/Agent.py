@@ -1,5 +1,5 @@
 from typing import Tuple
-from pedgrid.lib.BaseObject import BaseObject
+from pedgrid.objects.BaseObject import BaseObject
 import random
 import numpy as np
 from pedgrid.lib.Action import Action

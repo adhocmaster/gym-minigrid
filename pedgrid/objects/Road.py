@@ -1,5 +1,5 @@
 from typing import Tuple, List
-from pedgrid.lib.BaseObject import BaseObject
+from pedgrid.objects.BaseObject import BaseObject
 from pedgrid.agents.Lane import Lane
 
 class Road(BaseObject):

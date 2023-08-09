@@ -1,5 +1,6 @@
 from pedgrid.agents.TrajectoryVehicle import TrajectoryVehicle
 from pedgrid.lib import PositionAction
+from pedgrid.objects import *
 from .PedestrianEnv import PedestrianEnv
 
 from typing import List
@@ -19,11 +20,11 @@ class MultiLaneRoadEnv(PedestrianEnv):
     # generic actors?
     def __init__(
         self,
-        pedAgents: List[PedAgent]=[],
-        vehicleAgents: List[Vehicle]=[],
+        pedAgents: List[PedAgent]=None,
+        vehicleAgents: List[Vehicle]=None,
         road: Road=None,
-        sidewalks: List[Sidewalk]=[],
-        crosswalks: List[Crosswalk]=[],
+        sidewalks: List[Sidewalk]=None,
+        crosswalks: List[Crosswalk]=None,
         width=8,
         height=8,
         stepsIgnore = 100

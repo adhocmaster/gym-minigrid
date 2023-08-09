@@ -1,0 +1,129 @@
+from pedgrid.agents.PedAgent import PedAgent
+from pedgrid.agents.SimplePedAgent import SimplePedAgent
+from pedgrid.agents.TrajectoryVehicle import TrajectoryVehicle
+from pedgrid.agents.Vehicle import Vehicle
+from pedgrid.envs.pedestrian.MultiLaneRoadEnv import MultiLaneRoadEnv
+from pedgrid.envs.pedestrian.PedestrianEnv import PedestrianEnv
+from pedgrid.envs.tasks.TaskEnv import TaskEnv
+from pedgrid.lib.Direction import Direction
+from pedgrid.objects import *
+from typing import *
+from pedgrid.register import register
+
+
+class TaskOccludedVehicle(TaskEnv):
+
+    def __init__(self):
+        
+        env = self.createEnv()
+
+        # todo, create our vehicle and obsticle
+        # todo, the pedestrian object will be created by the research itself.
+
+        pedAgent = self.createPedestrian()
+        vehicleAgent = self.createVehicle(env)
+        objects = self.createObjects(env)
+
+        agents = [pedAgent, vehicleAgent]
+
+        super().__init__(
+            env=env,
+            agents=agents,
+            objects=objects
+        )
+        pass
+
+    def createPedestrian(self, env: MultiLaneRoadEnv) -> SimplePedAgent:
+        # set the position of the pedestrian to a predefined position
+        # add it to the environment.
+        ped = SimplePedAgent(
+            id=1,
+            position=(15, 40),
+            direction=Direction.RIGHT,
+            maxSpeed=1,
+            speed=1
+            
+        )
+
+        env.addPedAgent(ped)
+        return ped
+    
+
+    def createVehicle(self, env: MultiLaneRoadEnv) -> Vehicle:
+        return None 
+    
+    def createObjects(self, env: MultiLaneRoadEnv) -> List[BaseObject]:
+        return None
+
+
+    def createEnv(self) -> MultiLaneRoadEnv:
+        width = 100 
+        height = 100
+
+        lane1 = Lane(
+            topLeft=(10, 0),
+            bottomRight=(24, 79),
+            direction=1,
+            inRoad=1,
+            laneID=1,
+            posRelativeToCenter=-1
+        )
+        lane2 = Lane(
+            topLeft=(35, 0),
+            bottomRight=(49, 79),
+            direction=3,
+            inRoad=1,
+            laneID=2,
+            posRelativeToCenter=1
+        )
+        road = Road([lane1, lane2], roadID=1)
+
+        sidewalk1 = Sidewalk(
+            topLeft=(0, 0),
+            bottomRight=(9, 79),
+            sidewalkID=1
+        )
+
+        sidewalk2 = Sidewalk(
+            topLeft=(25, 0),
+            bottomRight=(34, 79),
+            sidewalkID=2
+        )
+
+        sidewalk3 = Sidewalk(
+            topLeft=(50, 0),
+            bottomRight=(59, 79),
+            sidewalkID=3
+        )
+
+        crosswalk1 = Crosswalk(
+            topLeft=(10, 40),
+            bottomRight=(24, 45),
+            crosswalkID=1,
+            overlapRoad=1,
+            overlapLanes=[1]
+        )
+
+        crosswalk2 = Crosswalk(
+            topLeft=(35, 40),
+            bottomRight=(49, 45),
+            crosswalkID=2,
+            overlapRoad=1,
+            overlapLanes=[2]
+        )
+        return MultiLaneRoadEnv(
+            pedAgents=[],
+            vehicleAgents=[],
+            road=road,
+            sidewalks=[sidewalk1, sidewalk2, sidewalk3],
+            crosswalks=[crosswalk1, crosswalk2],
+            width=width,
+            height=height,
+            stepsIgnore=100
+        )
+
+        
+register(
+    id='EnvGrid100x100-v0',
+    entry_point='gym_minigrid.envs.pedestrian.TaskOccludedVehicle:TaskOccludedVehicle'
+)

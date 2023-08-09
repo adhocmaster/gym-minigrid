@@ -1,14 +1,13 @@
 from typing import Tuple, List
-from pedgrid.lib.BaseObject import BaseObject
+from pedgrid.objects.BaseObject import BaseObject
 
-class Building(BaseObject): # to add more variety of objects - Taorui
+class Sidewalk(BaseObject):
     def __init__(
         self,
         topLeft: Tuple[int, int],
         bottomRight: Tuple[int, int],
-        buildingID: int,
-        height: int = None,
-        objectType="Building"
+        sidewalkID: int,
+        objectType="Sidewalk"
     ):
         super().__init__(
             topLeft=topLeft,
@@ -16,5 +15,4 @@ class Building(BaseObject): # to add more variety of objects - Taorui
             objectType=objectType
         )
         
-        self.buildingID = buildingID
-        self.height = height
+        self.sidewalkID = sidewalkID
