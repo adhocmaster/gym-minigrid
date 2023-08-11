@@ -234,6 +234,24 @@ class PedestrianEnv(MiniGridEnv):
         self.genSidewalks()
         self.mission = "switch sidewalks"
 
+    def executeObjectAction(self, action: Action):
+        if action is None:
+            return
+        
+        if action.action is ObjectAction.FORWARD:
+            self.executeForwardAction(action)
+
+    def executePositionAction(self, action: Action):
+        print ("executing position")
+        if action is None:
+            return 
+
+        agent = action.agent
+
+        logging.debug(f"position move vehicle {agent.id}")
+
+        self.positionMove(agent)
+
 
     def render(self, mode='human', close=False, highlight=True, tile_size=TILE_PIXELS):
         """

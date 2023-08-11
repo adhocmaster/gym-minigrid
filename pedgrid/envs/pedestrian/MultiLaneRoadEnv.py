@@ -45,7 +45,7 @@ class MultiLaneRoadEnv(PedestrianEnv):
 
         self.updateActionHandlers({
             VehicleAction : self.executeVehicleAction,
-            PositionAction: self.executePositionAction
+            ObjectAction: self.executeObjectAction
             })
         print(self._actionHandlers)
         # TODO label each tile with either lane/sidewalk?
@@ -148,30 +148,7 @@ class MultiLaneRoadEnv(PedestrianEnv):
         logging.debug(f"forwarding vehicle {agent.id}")
 
         self.forwardVehicle(agent)
-    
-    def executePositionAction(self, action: Action):
-        print ("executing position")
-        if action is None:
-            return 
-
-        agent = action.agent
-
-        logging.debug(f"position move vehicle {agent.id}")
-
-        self.positionMove(agent)
-
-    def executePositionAction(self, action: Action):
-        print ("executing position")
-        if action is None:
-            return 
-
-        agent = action.agent
-
-        logging.debug(f"position move vehicle {agent.id}")
-
-        self.positionMove(agent)
-
-
+        
     def render(self, mode='human', close=False, highlight=True, tile_size=TILE_PIXELS):
         """
         Render the whole-grid human view

@@ -5,6 +5,7 @@ from pedgrid.agents.Agent import Agent
 from pedgrid.agents.Vehicle import Vehicle
 from pedgrid.lib.Action import Action
 from pedgrid.lib.PositionAction import PositionAction
+from pedgrid.lib.ObjectAction import ObjectAction
 from pedgrid.rendering import fill_coords, point_in_line, point_in_rect
 
 
@@ -38,7 +39,7 @@ class TrajectoryVehicle(Vehicle):
             self.trajectory = trajectory
             
     def parallel1(self, env) -> Action:
-          return Action(self, PositionAction.KEEP)
+          return Action(self, ObjectAction.MOVETO)
     
     def parallel2(self, env) -> Action:
           return None
