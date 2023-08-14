@@ -3,6 +3,7 @@ import logging
 import gym
 from pedgrid.agents import *
 
+
 import sys
 print (sys.path)
 env = gym.make('PedestrianEnv-20x80-v0')

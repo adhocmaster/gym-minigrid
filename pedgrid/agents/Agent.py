@@ -51,6 +51,26 @@ class Agent(BaseObject):
         self.direction = self.initDirection
         pass
 
+    def positionMove(self, stepCount):
+            print ("moving position")
+            assert self.direction >= 0 and self.direction < 4
+            #Terry - uses the direction to left of agent to find vector to move left
+            # left_dir = agent.direction - 1
+            # if left_dir < 0:
+            #     left_dir += 4
+            # left_pos = agent.position + DIR_TO_VEC[left_dir]
+
+            # agent.position[0] = left_pos
+            step_count=stepCount
+            nextPoint=self.trajectory[step_count]
+            newTopLeftx = nextPoint[0]
+            newBottomRightx = self.bottomRight[0]+(nextPoint[0]-self.topLeft[0])
+            newTopLefty = nextPoint[1]
+            newBottomRighty = self.bottomRight[1]+(nextPoint[1]-self.topLeft[1])
+            self.topLeft = (newTopLeftx, newTopLefty)
+            self.bottomRight = (newBottomRightx, newBottomRighty)
+
+
     @abstractmethod
     def parallel1(self, env) -> Action:
         raise NotImplementedError("parallel1 is not implemented")
@@ -58,3 +78,5 @@ class Agent(BaseObject):
     @abstractmethod
     def parallel2(self, env) -> Action:
         raise NotImplementedError("parallel2 is not implemented")
+
+    
