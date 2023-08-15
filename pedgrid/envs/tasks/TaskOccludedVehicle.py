@@ -52,11 +52,28 @@ class TaskOccludedVehicle(TaskEnv):
     
 
     def createVehicle(self, env: MultiLaneRoadEnv) -> Vehicle:
-        return None 
-    
-    def createObjects(self, env: MultiLaneRoadEnv) -> List[BaseObject]:
-        return None
+        vehicle1 = TrajectoryVehicle(
+            id=1,
+            topLeft=(10, 10),
+            bottomRight=(15, 20),
+            trajectory=(12, 12, 14, 14, 16, 16, 18, 18, 20, 20),
+            direction=2,
+            maxSpeed=2,
+            speed=1
+        )
 
+        env.addVehicleAgent(vehicle1)
+        return vehicle1
+    
+    def createObjects(self, env: MultiLaneRoadEnv) -> List[BaseObject]: #here, figure out how to add to list?
+        baseObjects: List[BaseObject]
+        obstacle = BaseObject(
+            topLeft=(20, 40),
+            bottomRight=(27, 50)
+        )
+        baseObjects.append(obstacle)
+        return baseObjects
+    
 
     def createEnv(self) -> MultiLaneRoadEnv:
         width = 100 
