@@ -131,13 +131,14 @@ class MultiLaneRoadEnv(PedestrianEnv):
 
         # agent.position[0] = left_pos
         step_count=self.step_count
-        nextPoint=agent.trajectory[step_count]
-        newTopLeftx = nextPoint[0]
-        newBottomRightx = agent.bottomRight[0]+(nextPoint[0]-agent.topLeft[0])
-        newTopLefty = nextPoint[1]
-        newBottomRighty = agent.bottomRight[1]+(nextPoint[1]-agent.topLeft[1])
+        newTopLeftx = agent.trajectory[2*step_count]
+        newBottomRightx = agent.bottomRight[0]+(agent.trajectory[2*step_count]-agent.topLeft[0])
+        newTopLefty = agent.trajectory[2*step_count+1]
+        newBottomRighty = agent.bottomRight[1]+(agent.trajectory[2*step_count+1]-agent.topLeft[1])
         agent.topLeft = (newTopLeftx, newTopLefty)
         agent.bottomRight = (newBottomRightx, newBottomRighty)
+
+
     
     def executeVehicleAction(self, action: Action):
         if action is None:
