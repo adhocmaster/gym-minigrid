@@ -45,7 +45,7 @@ class MultiLaneRoadEnv(PedestrianEnv):
 
         self.updateActionHandlers({
             VehicleAction : self.executeVehicleAction,
-            PositionAction: self.executePositionAction
+            ObjectAction: self.executeObjectAction
             })
         print(self._actionHandlers)
         # TODO label each tile with either lane/sidewalk?
@@ -119,25 +119,6 @@ class MultiLaneRoadEnv(PedestrianEnv):
         else:
             agent.topLeft = newTopLeft
             agent.bottomRight = newBottomRight
-
-    def positionMove(self, agent: Agent):
-        print ("moving position")
-        assert agent.direction >= 0 and agent.direction < 4
-        #Terry - uses the direction to left of agent to find vector to move left
-        # left_dir = agent.direction - 1
-        # if left_dir < 0:
-        #     left_dir += 4
-        # left_pos = agent.position + DIR_TO_VEC[left_dir]
-
-        # agent.position[0] = left_pos
-        step_count=self.step_count
-        nextPoint=agent.trajectory[step_count]
-        newTopLeftx = nextPoint[0]
-        newBottomRightx = agent.bottomRight[0]+(nextPoint[0]-agent.topLeft[0])
-        newTopLefty = nextPoint[1]
-        newBottomRighty = agent.bottomRight[1]+(nextPoint[1]-agent.topLeft[1])
-        agent.topLeft = (newTopLeftx, newTopLefty)
-        agent.bottomRight = (newBottomRightx, newBottomRighty)
     
     def executeVehicleAction(self, action: Action):
         if action is None:
@@ -148,30 +129,7 @@ class MultiLaneRoadEnv(PedestrianEnv):
         logging.debug(f"forwarding vehicle {agent.id}")
 
         self.forwardVehicle(agent)
-    
-    def executePositionAction(self, action: Action):
-        print ("executing position")
-        if action is None:
-            return 
-
-        agent = action.agent
-
-        logging.debug(f"position move vehicle {agent.id}")
-
-        self.positionMove(agent)
-
-    def executePositionAction(self, action: Action):
-        print ("executing position")
-        if action is None:
-            return 
-
-        agent = action.agent
-
-        logging.debug(f"position move vehicle {agent.id}")
-
-        self.positionMove(agent)
-
-
+        
     def render(self, mode='human', close=False, highlight=True, tile_size=TILE_PIXELS):
         """
         Render the whole-grid human view

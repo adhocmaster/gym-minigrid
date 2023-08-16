@@ -389,6 +389,18 @@ class PedestrianEnv(MiniGridEnv):
         elif action.action == LaneAction.RIGHT:
             self.shiftRight(action.agent)
         pass
+
+    def executePositionAction(self, action: Action):
+        print ("executing position")
+        if action is None:
+            return 
+
+        agent = action.agent
+
+        logging.debug(f"position move vehicle {agent.id}")
+
+        # call the positionMove method of the agent
+        agent.positionMove(agent, self.step_count)
     
     def executeObjectAction(self, action: Action):
         if action is None:
@@ -396,8 +408,8 @@ class PedestrianEnv(MiniGridEnv):
         
         if action.action is ObjectAction.FORWARD:
             self.executeForwardAction(action)
-       # elif action is ObjectAction.MOVETO:
-       #     self.executeMoveToAction(self, action)
+        elif action is ObjectAction.MOVETO:
+            self.executePositionAction(self, action)
 
         
     def executeForwardAction(self, action: Action):

@@ -1,6 +1,8 @@
 exec(open("sys_path_hack.py").read())
 import gym
-import pedgrid
+import sys
+sys.path.append('../')
+
 from pedgrid.agents import BlueAdlerPedAgent, SimpleVehicle
 from pedgrid.agents import TutorialPedAgent
 from pedgrid.lib.Direction import Direction

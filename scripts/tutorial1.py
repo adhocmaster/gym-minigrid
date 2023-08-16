@@ -1,9 +1,11 @@
 import time
 import logging
 import gym
-import gym_minigrid
 from pedgrid.agents import *
 
+
+import sys
+print (sys.path)
 env = gym.make('PedestrianEnv-20x80-v0')
 env.reset()
 
