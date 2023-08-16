@@ -6,12 +6,12 @@ from pedgrid.agents.TrajectoryVehicle import TrajectoryVehicle
 from pedgrid.lib.Direction import Direction
 import time
 
-env = gym.make("EnvGrid100x100-v0")
+env = gym.make("TwoLaneRoadEnv60x80-v0")
 env.reset()
 
 vehicle1 = TrajectoryVehicle(
     id=1,
-    trajectory = [12, 12, 14, 14, 16, 16, 18, 18, 20, 20]
+    trajectory = [12, 12, 14, 14, 16, 16, 18, 18, 20, 20],
     topLeft=(10, 10),
     bottomRight=(15, 20),
     direction=2,

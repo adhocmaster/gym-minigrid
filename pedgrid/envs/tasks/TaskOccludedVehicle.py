@@ -65,7 +65,7 @@ class TaskOccludedVehicle(TaskEnv):
         env.addVehicleAgent(vehicle1)
         return vehicle1
     
-    def createObjects(self, env: MultiLaneRoadEnv) -> List[BaseObject]: #here, figure out how to add to list?
+    def createObjects(self, env: MultiLaneRoadEnv) -> List[BaseObject]: #is this needed still?
         baseObjects: List[BaseObject]
         obstacle = BaseObject(
             topLeft=(20, 40),
