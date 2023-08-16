@@ -1,10 +1,9 @@
 import gym
-import gym_minigrid
+import pedgrid
 
-from gym_minigrid.agents import Vehicle
-from gym_minigrid.agents.OwnAgents import TrajectoryVehicle
-from gym_minigrid.agents.SimpleVehicle import SimpleVehicle
-from gym_minigrid.lib.Direction import Direction
+
+from pedgrid.agents.TrajectoryVehicle import TrajectoryVehicle
+from pedgrid.lib.Direction import Direction
 import time
 
 env = gym.make("EnvGrid100x100-v0")
@@ -12,6 +11,7 @@ env.reset()
 
 vehicle1 = TrajectoryVehicle(
     id=1,
+    trajectory = [12, 12, 14, 14, 16, 16, 18, 18, 20, 20]
     topLeft=(10, 10),
     bottomRight=(15, 20),
     direction=2,

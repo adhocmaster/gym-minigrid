@@ -1,6 +1,6 @@
 from typing import Tuple, List
 from pedgrid.objects.BaseObject import BaseObject
-from pedgrid.agents.Lane import Lane
+from pedgrid.objects.Lane import Lane
 
 class Road(BaseObject):
     def __init__(

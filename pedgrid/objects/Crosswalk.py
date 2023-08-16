@@ -1,7 +1,7 @@
 from typing import Tuple, List
 from pedgrid.objects.BaseObject import BaseObject
 from pedgrid.lib.Direction import Direction
-from .Vehicle import Vehicle
+from pedgrid.agents.Vehicle import Vehicle
 import numpy as np
 
 class Crosswalk(BaseObject):
