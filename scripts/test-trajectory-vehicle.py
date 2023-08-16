@@ -1,11 +1,8 @@
-exec(open("sys_path_hack.py").read())
-
 import gym
 import pedgrid
 
-from pedgrid.agents import Vehicle
+
 from pedgrid.agents.TrajectoryVehicle import TrajectoryVehicle
-from pedgrid.agents.SimpleVehicle import SimpleVehicle
 from pedgrid.lib.Direction import Direction
 import time
 
@@ -14,9 +11,9 @@ env.reset()
 
 vehicle1 = TrajectoryVehicle(
     id=1,
+    trajectory = [12, 12, 14, 14, 16, 16, 18, 18, 20, 20],
     topLeft=(10, 10),
     bottomRight=(15, 20),
-    trajectory=(12, 12, 14, 14, 16, 16, 18, 18, 20, 20),
     direction=2,
     maxSpeed=1.0,
     speed=0.5,
@@ -24,7 +21,7 @@ vehicle1 = TrajectoryVehicle(
     inLane=1,
 )
 
-env.addVehicleAgent(vehicle1)
+env.addTrajectoryVehicleAgent(vehicle1)
 
 
 #Move the vehicle along the trajectory
