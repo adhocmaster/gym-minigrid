@@ -31,45 +31,24 @@ from shapely.geometry import Polygon, Point
 
 
 class FOVPerception(BasePerception):
+
+
+
     def getOG(self, agentLocation: Tuple[int, int], gridSize: Tuple[int, int], objects: List[BaseObject]) -> List[List[float]]:
 
-        Car = []
-        print(objects[0].topLeft[0])
-        for i in range(len(objects)):
-            shapely_polygon1 = Polygon([(objects[i].topLeft[0], objects[i].topLeft[1]),
-                                (objects[i].bottomRight[0], objects[i].topLeft[1]),
-                                (objects[i].bottomRight[0], objects[i].bottomRight[1]),
-                                (objects[i].topLeft[0], objects[i].bottomRight[1])])
-            print(shapely_polygon1.is_valid)
-            Car.append(shapely_polygon1)
-
-        print(Car[0].is_valid)
-        Car = MultiPolygon(Car)
-        print(Car.geoms[0].is_valid)
-
-        
+        obsticlePolygons = self._objsToMultiPolygon(objects)
 
         occupation_grid= []
 
-        def createGrid() -> 'list':
-            grid = []
-            for i in range(gridSize[0]):
-                for j in range(gridSize[1]):
-                    Grid = box(10*i, 10*j, 10*i+10, 10*j+10)
-                    grid.append(Grid)
-                    x1, y1 = Grid.exterior.xy
-                    plt.plot(x1, y1, color="black", linewidth=0.5)
-            return grid
-
-        grid = createGrid()
+        grid = self._createGrid(gridSize)
 
         for i in range(len(grid)):
             occupation_grid.append(0.0)
 
         #this is the main part of the function here we iterate through each object draw appropriate lines and create a polygon representing the blind spot
-        for i in range(len(Car.geoms)):
+        for i in range(len(obsticlePolygons.geoms)):
 
-            exterior_ring1 = Car.geoms[i]
+            exterior_ring1 = obsticlePolygons.geoms[i]
             print(exterior_ring1)
             vertices_coords1 = list(exterior_ring1.coords)  
             print(vertices_coords1)
@@ -128,7 +107,7 @@ class FOVPerception(BasePerception):
                 intersection11 = intersection1.coords[1]
                 intersection22 = intersection2.coords[1]
 
-                # Create the polygon representing the field of view behind the car
+                # Create the polygon representing the field of view behind the obsticlePolygons
                 rear_polygon_coords = [vertices_coords1[0]]
 
                 #rear_polygon_coords.append(vertices_coords1[0])
@@ -164,7 +143,7 @@ class FOVPerception(BasePerception):
             for i in range(len(grid)):
                 if ((occupation_grid[i]) == 0.5):
                     occupation_grid[i] = (0.5)
-                elif (grid[i]).intersects(Car):
+                elif (grid[i]).intersects(obsticlePolygons):
                     occupation_grid[i] = (1.0)
                 else:
                     occupation_grid[i] = (0.0)
@@ -183,3 +162,35 @@ class FOVPerception(BasePerception):
         plt.show()
 
         return occupation_grid
+    
+    
+
+    def _createGrid(self, gridSize: Tuple[int, int]) -> 'list':
+        grid = []
+        for i in range(gridSize[0]):
+            for j in range(gridSize[1]):
+                cell = box(10*i, 10*j, 10*i+10, 10*j+10)
+                grid.append(cell)
+        return grid
+    
+    def _plotPoly(poly: Polygon, color="black", linewidth=0.5):
+        x1, y1 = poly.exterior.xy
+        plt.plot(x1, y1, color=color, linewidth=linewidth)
+
+
+    def _objToPolygon(obj: BaseObject) -> Polygon:
+
+        polygon = Polygon([(obj.topLeft[0], obj.topLeft[1]),
+                            (obj.bottomRight[0], obj.topLeft[1]),
+                            (obj.bottomRight[0], obj.bottomRight[1]),
+                            (obj.topLeft[0], obj.bottomRight[1])])
+        assert polygon.is_valid
+        return polygon
+    
+    def _objsToMultiPolygon(self, objs: List[BaseObject]) -> MultiPolygon:
+        polygons = []
+        for obj in objs:
+            polygons.append(self._objToPolygon(obj))
+        return MultiPolygon(polygons)
+
+
