@@ -166,7 +166,14 @@ class FOVPerception(BasePerception):
                 occupation_grid[i] = (0.5)
 
     #needs to be fixed so that it can adjust itself to other sizes of grid
-    def _NotVisiblePolygon(self, vertices_coords: List[Tuple[float, float]], LineagentToVertexAndBeyondGrid0, LineagentToVertexAndBeyondGrid1, vertice_max, gridSize):
+    def _NotVisiblePolygon(
+            self, 
+            vertices_coords: List[Tuple[float, float]], 
+            LineagentToVertexAndBeyondGrid0, 
+            LineagentToVertexAndBeyondGrid1, 
+            vertice_max, 
+            gridSize
+        ):
         grid_boundary = box(0, 0, gridSize[0], gridSize[1])
         x, y = grid_boundary.exterior.xy
         plt.plot(x, y, color="blue", alpha=0.5)
