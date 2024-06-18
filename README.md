@@ -5,7 +5,9 @@ PedGrid is a minimal simulator for autonomous vehicle driving with a visualizati
 1. A corridor environment to model bidirectional pedestrian flow.
 2. A two-lane environment to model pedestrian crossing.
 
-Please cite our accepted paper if you use PedGrid or doing relevant research (DOI pending):
+Please cite our accepted paper if you use PedGrid or doing relevant research:
+
+DOI: 10.1109/ITSC57777.2023.10422381
 
 ```
 @inproceedings{inproceedings,
